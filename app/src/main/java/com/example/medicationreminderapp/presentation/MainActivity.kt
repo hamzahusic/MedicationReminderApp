@@ -33,13 +33,17 @@ import com.example.medicationreminderapp.presentation.ui.components.AdherenceSta
 import com.example.medicationreminderapp.presentation.ui.components.Greeting
 import com.example.medicationreminderapp.presentation.ui.components.Stats
 import com.example.medicationreminderapp.presentation.ui.components.UpcomingMedication
+import com.example.medicationreminderapp.presentation.ui.screens.MedicationsScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            HomeScreen()
+            MedicationReminderAppTheme {
+                HomeScreen()
+//                MedicationsScreen()
+            }
         }
     }
 }
@@ -48,43 +52,42 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun HomeScreen() {
     var progress by remember { mutableFloatStateOf(0.66f) }
-    MedicationReminderAppTheme {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text("Home") },
-                    navigationIcon = {
-                        IconButton(onClick = { /* Open drawer */ }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
-                        }
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor = MaterialTheme.colorScheme.background
-                    )
+
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Home") },
+                navigationIcon = {
+                    IconButton(onClick = { /* Open drawer */ }) {
+                        Icon(Icons.Default.Menu, contentDescription = "Menu")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
                 )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = { /* Action */ },
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Icon(Icons.Default.Add, contentDescription = "Add")
-                }
-            },
-            containerColor = MaterialTheme.colorScheme.background,
-            modifier = Modifier.fillMaxSize()
-        ) { innerPadding ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /* Action */ },
+                containerColor = MaterialTheme.colorScheme.primary
             ) {
-                Greeting()
-                Stats()
-                AdherenceStat(progress)
-                UpcomingMedication()
+                Icon(Icons.Default.Add, contentDescription = "Add")
             }
+        },
+        containerColor = MaterialTheme.colorScheme.background,
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(20.dp),
+            modifier = Modifier
+                .padding(innerPadding)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Greeting()
+            Stats()
+            AdherenceStat(progress)
+            UpcomingMedication()
         }
     }
 }
