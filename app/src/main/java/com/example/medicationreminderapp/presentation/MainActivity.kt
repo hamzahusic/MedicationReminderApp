@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -26,6 +27,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
@@ -33,6 +35,7 @@ import com.example.medicationreminderapp.presentation.ui.components.AdherenceSta
 import com.example.medicationreminderapp.presentation.ui.components.Greeting
 import com.example.medicationreminderapp.presentation.ui.components.Stats
 import com.example.medicationreminderapp.presentation.ui.components.UpcomingMedication
+import com.example.medicationreminderapp.presentation.ui.screens.AddMedicationScreen
 import com.example.medicationreminderapp.presentation.ui.screens.MedicationsScreen
 
 class MainActivity : ComponentActivity() {
@@ -41,8 +44,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedicationReminderAppTheme {
-                HomeScreen()
-//                MedicationsScreen()
+              HomeScreen()
+//              MedicationsScreen()
+//              AddMedicationScreen()
             }
         }
     }
@@ -55,8 +59,8 @@ fun HomeScreen() {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Home") },
+            CenterAlignedTopAppBar(
+                title = { Text("Home", fontWeight = FontWeight.ExtraBold) },
                 navigationIcon = {
                     IconButton(onClick = { /* Open drawer */ }) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
