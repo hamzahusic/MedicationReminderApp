@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.components.FirstDoseTimePicker
@@ -139,5 +140,7 @@ fun AddMedicationScreen(){
 @Preview
 @Composable
 fun AddMedicationScreenPreview(){
-    AddMedicationScreen()
+    MedicationReminderAppTheme {
+        AddMedicationScreen()
+    }
 }

@@ -101,5 +101,7 @@ fun HomeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    MedicationReminderAppTheme {
+        HomeScreen()
+    }
 }

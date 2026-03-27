@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
 import com.example.medicationreminderapp.presentation.ui.components.Medication
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
@@ -103,5 +104,7 @@ fun MedicationsScreen(){
 @Preview
 @Composable
 fun MedicationScreenPreview(){
-    MedicationsScreen()
+    MedicationReminderAppTheme {
+        MedicationsScreen()
+    }
 }

@@ -31,11 +31,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.presentation.theme.GreenContainer
+import com.example.medicationreminderapp.presentation.theme.GreenTaken
+import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +48,7 @@ fun MedicationDetailsScreen() {
             CenterAlignedTopAppBar(
                 title = { Text("Medication Details", fontWeight = FontWeight.ExtraBold) },
                 navigationIcon = {
-                    IconButton(onClick = { /* Navigate back */ }) {
+                    IconButton(onClick = { }) {
                         Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
                     }
                 },
@@ -181,7 +183,7 @@ fun MedicationDetailsScreen() {
 
                 Card(
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)),
+                    colors = CardDefaults.cardColors(containerColor = GreenContainer),
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -193,7 +195,7 @@ fun MedicationDetailsScreen() {
                         Icon(
                             Icons.Default.CheckCircle,
                             contentDescription = "Taken",
-                            tint = Color(0xFF2E7D32),
+                            tint = GreenTaken,
                             modifier = Modifier.size(28.dp)
                         )
                         Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -201,12 +203,12 @@ fun MedicationDetailsScreen() {
                                 text = "Taken at 13:59",
                                 fontSize = 16.sp,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color(0xFF1B5E20)
+                                color = GreenTaken
                             )
                             Text(
                                 text = "Keep it up!",
                                 fontSize = 13.sp,
-                                color = Color(0xFF2E7D32)
+                                color = GreenTaken.copy(alpha = 0.7f)
                             )
                         }
                     }
@@ -262,5 +264,7 @@ fun MedicationDetailsScreen() {
 @Preview(showBackground = true)
 @Composable
 fun MedicationDetailsScreenPreview() {
-    MedicationDetailsScreen()
+    MedicationReminderAppTheme {
+        MedicationDetailsScreen()
+    }
 }
