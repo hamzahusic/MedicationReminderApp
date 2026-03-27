@@ -29,6 +29,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.components.FirstDoseTimePicker
 
 
@@ -65,7 +66,9 @@ fun AddMedicationScreen(){
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = "MEDICATION NAME"
+                text = "MEDICATION NAME",
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             TextField(
@@ -78,7 +81,9 @@ fun AddMedicationScreen(){
             )
 
             Text(
-                text = "DOSAGE"
+                text = "DOSAGE",
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onBackground
             )
             TextField(
                 value = username,
@@ -90,7 +95,9 @@ fun AddMedicationScreen(){
             )
 
             Text(
-                text = "DOSAGE TIME"
+                text = "DOSAGE TIME",
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             Column(
