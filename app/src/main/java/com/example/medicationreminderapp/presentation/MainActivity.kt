@@ -36,6 +36,7 @@ import com.example.medicationreminderapp.presentation.ui.components.Greeting
 import com.example.medicationreminderapp.presentation.ui.components.Stats
 import com.example.medicationreminderapp.presentation.ui.components.UpcomingMedication
 import com.example.medicationreminderapp.presentation.ui.screens.AddMedicationScreen
+import com.example.medicationreminderapp.presentation.ui.screens.MedicationDetailsScreen
 import com.example.medicationreminderapp.presentation.ui.screens.MedicationsScreen
 
 class MainActivity : ComponentActivity() {
@@ -44,9 +45,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedicationReminderAppTheme {
-              HomeScreen()
+//              HomeScreen()
 //              MedicationsScreen()
 //              AddMedicationScreen()
+                MedicationDetailsScreen()
             }
         }
     }
