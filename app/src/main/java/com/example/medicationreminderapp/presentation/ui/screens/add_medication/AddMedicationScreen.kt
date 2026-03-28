@@ -37,7 +37,8 @@ import com.example.medicationreminderapp.presentation.ui.screens.add_medication.
 @Composable
 fun AddMedicationScreen(){
 
-    var username by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var dosage by remember { mutableStateOf("") }
     var selectedHour by remember { mutableIntStateOf(8) }
     var selectedMinute by remember { mutableIntStateOf(0) }
 
@@ -72,8 +73,8 @@ fun AddMedicationScreen(){
             )
 
             TextField(
-                value = username,
-                onValueChange = { username = it },
+                value = name,
+                onValueChange = { name = it },
                 label = { Text("E.g. Paracetamol") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -86,8 +87,8 @@ fun AddMedicationScreen(){
                 color = MaterialTheme.colorScheme.onBackground
             )
             TextField(
-                value = username,
-                onValueChange = { username = it },
+                value = dosage,
+                onValueChange = { dosage = it },
                 label = { Text("E.g. 500mg") },
                 modifier = Modifier
                     .fillMaxWidth()
