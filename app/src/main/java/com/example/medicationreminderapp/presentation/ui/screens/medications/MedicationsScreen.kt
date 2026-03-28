@@ -26,7 +26,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
+import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,13 +64,16 @@ fun MedicationsScreen(){
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            val medications = listOf(
+            val medications = listOf<Medication>(
                 Medication("Paracetamol", "500mg", "14:00"),
                 Medication("Ibuprofen", "450mg", "08:00"),
                 Medication("Caffetin", "500mg", "12:00"),
                 Medication("Buscopan", "400mg", "11:00"),
             )
 
+            if (medications.isEmpty()){
+                EmptyListLabel()
+            }
 
             medications.forEach { medication ->
                 MedicationCard(medication)
@@ -90,7 +95,8 @@ fun MedicationsScreen(){
 
                 Text(
                     text = "Add Medication",
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    fontSize = 17.sp
                 )
             }
 

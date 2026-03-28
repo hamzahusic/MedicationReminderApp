@@ -33,8 +33,12 @@ import com.example.medicationreminderapp.presentation.ui.components.PasswordInpu
 @Composable
 fun LoginScreen(){
 
-    var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val isValid = !email.isEmpty() && !password.isEmpty()
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -82,7 +86,7 @@ fun LoginScreen(){
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    text = "Welcome back \uD83D\uDC4B",
+                    text = "Welcome\nback \uD83D\uDC4B",
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 55.sp,
                     lineHeight = 55.sp
@@ -119,10 +123,6 @@ fun LoginScreen(){
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
-                var password by remember { mutableStateOf("") }
-                var passwordVisible by remember { mutableStateOf(false) }
-
-
                 PasswordInput(
                     password,
                     passwordVisible,
@@ -134,7 +134,8 @@ fun LoginScreen(){
                 Button(
                     onClick = {},
                     modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = isValid
                 ) {
 
                     Text(

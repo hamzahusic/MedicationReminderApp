@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.component.FirstDoseTimePicker
 
 
@@ -41,6 +42,8 @@ fun AddMedicationScreen(){
     var dosage by remember { mutableStateOf("") }
     var selectedHour by remember { mutableIntStateOf(8) }
     var selectedMinute by remember { mutableIntStateOf(0) }
+
+    val isValid = !name.isEmpty() && !dosage.isEmpty()
 
     Scaffold(
         topBar = {
@@ -75,7 +78,7 @@ fun AddMedicationScreen(){
             TextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("E.g. Paracetamol") },
+                label = { Text("Paracetamol") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
@@ -89,7 +92,7 @@ fun AddMedicationScreen(){
             TextField(
                 value = dosage,
                 onValueChange = { dosage = it },
-                label = { Text("E.g. 500mg") },
+                label = { Text("500mg") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
@@ -124,11 +127,14 @@ fun AddMedicationScreen(){
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 10.dp)
+                        .padding(top = 10.dp),
+                enabled = isValid,
+                shape = RoundedCornerShape(12.dp),
             ) {
                 Text(
                     text = "Save Medication",
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    modifier = Modifier.padding(vertical = 12.dp),
+                    fontSize = 17.sp
                 )
             }
 

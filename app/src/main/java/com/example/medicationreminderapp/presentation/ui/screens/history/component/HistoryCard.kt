@@ -55,7 +55,7 @@ fun HistoryCard(medication: Medication, status: Boolean = true) {
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${medication.takeAt}  •  ${medication.dosage}",
+                    text = "${medication.takeAt}  -  ${medication.dosage}",
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

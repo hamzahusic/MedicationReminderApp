@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
+import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.HistoryCard
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.WeekCalendar
@@ -83,14 +84,14 @@ fun HistoryScreen() {
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
 
             AdherenceOverviewCard(uploadProgress)
 
             Text(
                 text = "CALENDAR",
-                fontSize = 11.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.5.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -104,19 +105,26 @@ fun HistoryScreen() {
 
             Text(
                 text = if (selectedDate == today) "TODAY" else "$selectedDate",
-                fontSize = 11.sp,
+                fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.5.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            val todayHistory = listOf(
+            val todayHistory = listOf<Medication>(
                 Medication("Paracetamol", "500mg", "08:02"),
                 Medication("Ibuprofen", "400mg", "14:02"),
                 Medication("Ibuprofen", "400mg", "18:00"),
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+
+                if(todayHistory.isEmpty()){
+                    EmptyListLabel(
+                        content = "No medication on this day"
+                    )
+                }
+
                 todayHistory.forEachIndexed { index, medication ->
                     HistoryCard(medication, status = index != 1)
                 }

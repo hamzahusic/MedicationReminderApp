@@ -35,6 +35,12 @@ fun RegisterScreen(){
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val isValid = !email.isEmpty() && !password.isEmpty() && !username.isEmpty()
+
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -132,9 +138,6 @@ fun RegisterScreen(){
                     color = MaterialTheme.colorScheme.onBackground
                 )
 
-                var password by remember { mutableStateOf("") }
-                var passwordVisible by remember { mutableStateOf(false) }
-
 
                 PasswordInput(
                     password,
@@ -147,7 +150,8 @@ fun RegisterScreen(){
                 Button(
                     onClick = {},
                     modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
-                    shape = RoundedCornerShape(12.dp)
+                    shape = RoundedCornerShape(12.dp),
+                    enabled = isValid
                 ) {
 
                     Text(

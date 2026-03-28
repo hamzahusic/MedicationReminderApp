@@ -7,8 +7,10 @@ import androidx.activity.enableEdgeToEdge
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.AddMedicationScreen
 import com.example.medicationreminderapp.presentation.ui.screens.home.HomeScreen
+import com.example.medicationreminderapp.presentation.ui.screens.login.LoginScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.MedicationDetailsScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medications.MedicationsScreen
+import com.example.medicationreminderapp.presentation.ui.screens.register.RegisterScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,10 +18,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedicationReminderAppTheme {
-              HomeScreen()
+//              HomeScreen()
 //              MedicationsScreen()
 //              AddMedicationScreen()
 //              MedicationDetailsScreen()
+//              LoginScreen()
+                RegisterScreen()
             }
         }
     }
