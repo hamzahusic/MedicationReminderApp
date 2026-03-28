@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.screens
+package com.example.medicationreminderapp.presentation.ui.screens.medication_details
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.GreenContainer
 import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
+import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,6 +144,7 @@ fun MedicationDetailsScreen() {
                             )
                         }
                     }
+
                     Card(
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(
@@ -181,38 +183,7 @@ fun MedicationDetailsScreen() {
                     letterSpacing = 0.5.sp
                 )
 
-                Card(
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = GreenContainer),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Icon(
-                            Icons.Default.CheckCircle,
-                            contentDescription = "Taken",
-                            tint = GreenTaken,
-                            modifier = Modifier.size(28.dp)
-                        )
-                        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text(
-                                text = "Taken at 13:59",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = GreenTaken
-                            )
-                            Text(
-                                text = "Keep it up!",
-                                fontSize = 13.sp,
-                                color = GreenTaken.copy(alpha = 0.7f)
-                            )
-                        }
-                    }
-                }
+                StausLabel()
             }
 
             // Bottom action buttons

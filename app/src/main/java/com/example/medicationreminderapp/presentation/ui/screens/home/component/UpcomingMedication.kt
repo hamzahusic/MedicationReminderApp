@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.components
+package com.example.medicationreminderapp.presentation.ui.screens.home.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
 
 @Composable
 fun UpcomingMedication() {

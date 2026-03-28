@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.components
+package com.example.medicationreminderapp.presentation.ui.screens.history.component
 
 import android.app.DatePickerDialog
 import android.os.Build

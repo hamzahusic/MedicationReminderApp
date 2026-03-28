@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.components
+package com.example.medicationreminderapp.presentation.ui.screens.add_medication.component
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth

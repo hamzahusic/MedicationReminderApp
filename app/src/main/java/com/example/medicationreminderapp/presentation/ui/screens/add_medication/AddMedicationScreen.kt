@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.screens
+package com.example.medicationreminderapp.presentation.ui.screens.add_medication
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.presentation.ui.components.FirstDoseTimePicker
+import com.example.medicationreminderapp.presentation.ui.screens.add_medication.component.FirstDoseTimePicker
 
 
 @OptIn(ExperimentalMaterial3Api::class)

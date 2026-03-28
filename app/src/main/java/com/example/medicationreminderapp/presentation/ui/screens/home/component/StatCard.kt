@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.components
+package com.example.medicationreminderapp.presentation.ui.screens.home.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

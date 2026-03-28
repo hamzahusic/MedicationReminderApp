@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.components
+package com.example.medicationreminderapp.presentation.ui.screens.history.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.RedMissed
+import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
 
 @Composable
 fun HistoryCard(medication: Medication, status: Boolean = true) {

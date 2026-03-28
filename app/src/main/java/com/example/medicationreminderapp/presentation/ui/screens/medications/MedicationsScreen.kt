@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.screens
+package com.example.medicationreminderapp.presentation.ui.screens.medications
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +19,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
-import com.example.medicationreminderapp.presentation.ui.components.Medication
-import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
