@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.screens.register
+package com.example.medicationreminderapp.presentation.ui.screens.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,7 @@ import com.example.medicationreminderapp.presentation.theme.MedicationReminderAp
 import com.example.medicationreminderapp.presentation.ui.components.PasswordInput
 
 @Composable
-fun RegisterScreen(){
+fun LoginScreen(){
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -78,15 +78,17 @@ fun RegisterScreen(){
                 }
             }
 
-            Column() {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
                 Text(
-                    text = "Create your account ",
+                    text = "Welcome back \uD83D\uDC4B",
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 50.sp,
-                    lineHeight = 45.sp
+                    fontSize = 55.sp,
+                    lineHeight = 55.sp
                 )
                 Text(
-                    text = "Start tracking your medications in seconds.",
+                    text = "Sign in to continue managing your medications.",
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
@@ -95,21 +97,6 @@ fun RegisterScreen(){
                 modifier = Modifier.padding(top = 30.dp),
                 verticalArrangement = Arrangement.spacedBy(7.dp)
             ) {
-
-                Text(
-                    text = "USERNAME",
-                    fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-
-                TextField(
-                    value = username,
-                    onValueChange = { username = it },
-                    placeholder = { Text("John Doe") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(12.dp))
-                )
 
                 Text(
                     text = "EMAIL",
@@ -151,7 +138,7 @@ fun RegisterScreen(){
                 ) {
 
                     Text(
-                        text = "Create Account",
+                        text = "Sign In",
                         fontSize = 17.sp,
                         modifier = Modifier.padding(vertical = 10.dp),
                     )
@@ -162,12 +149,12 @@ fun RegisterScreen(){
                     modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
                 ) {
                     Text(
-                        text = "Already have an account?",
+                        text = "Don't have an account?",
                         fontSize = 17.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = "Sign in",
+                        text = "Create one",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
                         modifier = Modifier.padding(start = 5.dp),
@@ -185,8 +172,8 @@ fun RegisterScreen(){
 
 @Preview
 @Composable
-fun RegisterScreenPreview(){
+fun LoginScreenPreview(){
     MedicationReminderAppTheme() {
-        RegisterScreen()
+        LoginScreen()
     }
 }
