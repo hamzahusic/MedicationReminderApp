@@ -28,10 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.data.todayHistory
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.HistoryCard
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.WeekCalendar
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.AdherenceOverviewCard
 import java.time.LocalDate
@@ -111,11 +111,6 @@ fun HistoryScreen() {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            val todayHistory = listOf<Medication>(
-                Medication("Paracetamol", "500mg", "08:02"),
-                Medication("Ibuprofen", "400mg", "14:02"),
-                Medication("Ibuprofen", "400mg", "18:00"),
-            )
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
 

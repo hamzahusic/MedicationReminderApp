@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
 //              AddMedicationScreen()
 //              MedicationDetailsScreen()
 //              LoginScreen()
-                RegisterScreen()
+              RegisterScreen()
             }
         }
     }
