@@ -28,7 +28,6 @@ import com.example.medicationreminderapp.presentation.theme.MedicationReminderAp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.data.medications
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
 

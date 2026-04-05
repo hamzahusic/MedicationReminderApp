@@ -27,7 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 
 @Composable
 fun MedicationCard(medication: Medication) {

@@ -34,5 +34,3 @@ fun UpcomingMedication() {
         }
     }
 }
-
-data class Medication(var name: String, val dosage: String, val takeAt: String)

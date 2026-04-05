@@ -1,6 +1,5 @@
 package com.example.medicationreminderapp.data
-
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 
 val todayHistory = listOf<Medication>(
     Medication("Paracetamol", "500mg", "08:02"),
