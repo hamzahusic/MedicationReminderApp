@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -51,50 +53,57 @@ fun MedicationsScreen(){
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier =
                 Modifier
                     .padding(innerPadding)
                     .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Text(
-                text = "ACTIVE",
-                fontWeight = FontWeight.ExtraBold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+
+            item{
+                Text(
+                    text = "ACTIVE",
+                    fontWeight = FontWeight.ExtraBold,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
 
             if (medications.isEmpty()){
-                EmptyListLabel()
+                item{
+                    EmptyListLabel()
+                }
             }
 
-            medications.forEach { medication ->
+            items(
+                items = medications
+            ) { medication ->
                 MedicationCard(medication)
             }
 
-            Button(
-                onClick = {},
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = null, // Content description can be null for decorative icons
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp)) // Add space between icon and text
+            item{
+                Button(
+                    onClick = {},
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Add,
+                        contentDescription = null, // Content description can be null for decorative icons
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp)) // Add space between icon and text
 
-                Text(
-                    text = "Add Medication",
-                    modifier = Modifier.padding(vertical = 12.dp),
-                    fontSize = 17.sp
-                )
+                    Text(
+                        text = "Add Medication",
+                        modifier = Modifier.padding(vertical = 12.dp),
+                        fontSize = 17.sp
+                    )
+                }
             }
-
-
 
         }
     }

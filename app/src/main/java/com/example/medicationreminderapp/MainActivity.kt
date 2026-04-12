@@ -19,11 +19,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MedicationReminderAppTheme {
 //              HomeScreen()
-//              MedicationsScreen()
+              MedicationsScreen()
 //              AddMedicationScreen()
 //              MedicationDetailsScreen()
 //              LoginScreen()
-              RegisterScreen()
+//              RegisterScreen()
             }
         }
     }
