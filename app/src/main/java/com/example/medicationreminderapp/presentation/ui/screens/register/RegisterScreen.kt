@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.PasswordInput
+import com.example.medicationreminderapp.presentation.ui.screens.register.util.isRegistrationFormValid
 
 @Composable
 fun RegisterScreen(){
@@ -38,8 +40,7 @@ fun RegisterScreen(){
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val isValid = !email.isEmpty() && !password.isEmpty() && !username.isEmpty()
-
+    val isValid by remember { derivedStateOf { isRegistrationFormValid(username, email, password) } }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import com.example.medicationreminderapp.presentation.theme.MedicationReminderAp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.component.FirstDoseTimePicker
+import com.example.medicationreminderapp.presentation.ui.screens.add_medication.util.isAddMedicationFormValid
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +45,7 @@ fun AddMedicationScreen(){
     var selectedHour by remember { mutableIntStateOf(8) }
     var selectedMinute by remember { mutableIntStateOf(0) }
 
-    val isValid = !name.isEmpty() && !dosage.isEmpty()
+    val isValid by remember { derivedStateOf { isAddMedicationFormValid(name, dosage) } }
 
     Scaffold(
         topBar = {
