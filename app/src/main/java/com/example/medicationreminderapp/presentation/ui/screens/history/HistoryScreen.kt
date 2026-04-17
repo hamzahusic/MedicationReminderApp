@@ -120,8 +120,8 @@ fun HistoryScreen() {
                     )
                 }
 
-                todayHistory.forEachIndexed { index, medication ->
-                    HistoryCard(medication, status = index != 1)
+                todayHistory.forEach { medication ->
+                    HistoryCard(medication)
                 }
             }
         }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
@@ -35,14 +36,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.theme.GreenContainer
 import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.DetailsCard
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
+import com.example.medicationreminderapp.presentation.util.formatTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicationDetailsScreen() {
+fun MedicationDetailsScreen(medication: Medication) {
 
     Scaffold(
         topBar = {
@@ -116,61 +121,12 @@ fun MedicationDetailsScreen() {
                 }
 
                 // Stat cards row
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Card(
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "DOSAGE",
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 11.sp,
-                                letterSpacing = 0.5.sp
-                            )
-                            Text(
-                                text = "500mg",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item{
+                        DetailsCard("DOSAGE", medication.dosage, Modifier.fillParentMaxWidth(0.5f))
                     }
-
-                    Card(
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "DOSAGE TIME",
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 11.sp,
-                                letterSpacing = 0.5.sp
-                            )
-                            Text(
-                                text = "14:00",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                    item{
+                        DetailsCard("DOSAGE TIME", formatTime(medication.takeAtHour, medication.takeAtMinute), Modifier.fillParentMaxWidth(0.5f))
                     }
                 }
 
@@ -236,6 +192,6 @@ fun MedicationDetailsScreen() {
 @Composable
 fun MedicationDetailsScreenPreview() {
     MedicationReminderAppTheme {
-        MedicationDetailsScreen()
+        MedicationDetailsScreen(medications[0])
     }
 }

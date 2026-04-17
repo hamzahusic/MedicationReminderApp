@@ -25,9 +25,9 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medic
 import com.example.medicationreminderapp.presentation.util.formatTime
 
 @Composable
-fun HistoryCard(medication: Medication, status: Boolean = true) {
-    val statusColor = if (status) GreenTaken else RedMissed
-    val statusLabel = if (status) "TAKEN" else "MISSED"
+fun HistoryCard(medication: Medication) {
+    val statusColor = if (medication.isTaken) GreenTaken else RedMissed
+    val statusLabel = if (medication.isTaken) "TAKEN" else "MISSED"
 
     Row(
         verticalAlignment = Alignment.CenterVertically,

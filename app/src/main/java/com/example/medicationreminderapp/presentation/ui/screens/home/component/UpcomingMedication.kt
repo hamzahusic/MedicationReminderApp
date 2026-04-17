@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
-import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
 
 @Composable
 fun UpcomingMedication() {

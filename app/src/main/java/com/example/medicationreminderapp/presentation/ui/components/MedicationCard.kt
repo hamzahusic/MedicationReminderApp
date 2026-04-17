@@ -1,4 +1,4 @@
-package com.example.medicationreminderapp.presentation.ui.screens.medications.component
+package com.example.medicationreminderapp.presentation.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

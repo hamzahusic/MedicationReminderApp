@@ -1,7 +1,6 @@
 package com.example.medicationreminderapp.presentation.ui.screens.medications
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +22,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,11 +34,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
-import com.example.medicationreminderapp.presentation.ui.screens.medications.component.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.medications.component.SearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationsScreen(){
+
+    var inputText by remember { mutableStateOf("") }
+    var filteredMedication by remember { mutableStateOf(medications) }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -62,22 +70,38 @@ fun MedicationsScreen(){
         ) {
 
             item{
+                SearchBar(inputText, {
+                    input -> inputText = input
+                            filteredMedication = medications.filter {
+                                it.name.lowercase().contains(input.lowercase())
+                            }
+                })
+            }
+
+            item{
                 Text(
                     text = "ACTIVE",
+                    fontSize = 12.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
 
 
-            if (medications.isEmpty()){
+            if (filteredMedication.isEmpty() && medications.isNotEmpty()){
+                item{
+                    EmptyListLabel(
+                        content = "No medication found"
+                    )
+                }
+            } else if(medications.isEmpty()){
                 item{
                     EmptyListLabel()
                 }
             }
 
             items(
-                items = medications
+                items = filteredMedication
             ) { medication ->
                 MedicationCard(medication)
             }
