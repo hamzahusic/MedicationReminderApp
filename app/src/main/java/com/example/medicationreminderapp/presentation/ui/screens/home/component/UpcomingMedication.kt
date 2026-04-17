@@ -2,9 +2,19 @@ package com.example.medicationreminderapp.presentation.ui.screens.home.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -14,9 +24,11 @@ import com.example.medicationreminderapp.presentation.ui.screens.medications.com
 
 @Composable
 fun UpcomingMedication() {
-    Column(
-        verticalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
+    Column{
+        val filters = listOf("All", "Morning", "Afternoon")
+        var selectedFilter by remember { mutableStateOf("All") }
+        var filteredMedications by remember { mutableStateOf(medications) }
+
         Text(
             text = "UPCOMING",
             fontSize = 12.sp,
@@ -25,12 +37,41 @@ fun UpcomingMedication() {
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        if(medications.isEmpty()){
-            EmptyListLabel()
+        Column {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.padding(vertical = 8.dp)
+            ) {
+                items(filters) { filter ->
+                    FilterChip(
+                        selected = selectedFilter == filter,
+                        onClick = {
+                            selectedFilter = filter
+                            filteredMedications = medications.filter {
+                                when (filter) {
+                                    "Morning" -> it.takeAtHour < 12
+                                    "Afternoon" -> it.takeAtHour >= 12
+                                    else -> true
+                                }
+                            }
+                        },
+                        label = { Text(filter) }
+                    )
+                }
+            }
+
+            if(filteredMedications.isEmpty()){
+                EmptyListLabel()
+            }
+
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(filteredMedications) { medication ->
+                    MedicationCard(medication)
+                }
+            }
         }
 
-        medications.forEach { medication ->
-            MedicationCard(medication)
-        }
     }
 }

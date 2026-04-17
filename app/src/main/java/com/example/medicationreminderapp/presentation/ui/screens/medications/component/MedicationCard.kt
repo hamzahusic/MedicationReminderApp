@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.util.formatTime
 
 @Composable
 fun MedicationCard(medication: Medication) {
@@ -64,7 +65,7 @@ fun MedicationCard(medication: Medication) {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
-                        text = "${medication.dosage} at ${medication.takeAt}",
+                        text = "${medication.dosage} at ${formatTime(medication.takeAtHour, medication.takeAtMinute)}",
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
