@@ -1,6 +1,7 @@
 package com.example.medicationreminderapp.presentation.ui.screens.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,8 @@ import com.example.medicationreminderapp.presentation.ui.screens.login.util.isLo
 
 @Composable
 fun LoginScreen(
-    onNavigateToHome: () -> Unit
+    onNavigateToHome: () -> Unit,
+    onNavigateToRegister: () -> Unit
 ){
 
     var email by remember { mutableStateOf("") }
@@ -139,7 +141,9 @@ fun LoginScreen(
                     onClick = {
                         onNavigateToHome()
                     },
-                    modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 35.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isValid
                 ) {
@@ -153,7 +157,9 @@ fun LoginScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
                 ) {
                     Text(
                         text = "Don't have an account?",
@@ -164,7 +170,10 @@ fun LoginScreen(
                         text = "Create one",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable{ onNavigateToRegister() }
+                        ,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -182,7 +191,8 @@ fun LoginScreen(
 fun LoginScreenPreview(){
     MedicationReminderAppTheme() {
         LoginScreen(
-            onNavigateToHome = {}
+            onNavigateToHome = {},
+            onNavigateToRegister = {}
         )
     }
 }

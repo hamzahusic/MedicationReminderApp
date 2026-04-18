@@ -41,7 +41,8 @@ import com.example.medicationreminderapp.presentation.ui.screens.medications.com
 @Composable
 fun MedicationsScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToAddMedication: () -> Unit
+    onNavigateToAddMedication: () -> Unit,
+    onNavigateToMedicationDetailsScreen: (route:String) -> Unit
 ){
     var inputText by remember { mutableStateOf("") }
     var filteredMedication by remember { mutableStateOf(medications) }
@@ -105,7 +106,10 @@ fun MedicationsScreen(
             items(
                 items = filteredMedication
             ) { medication ->
-                MedicationCard(medication)
+                MedicationCard(
+                    medication,
+                    onNavigateToMedicationDetailsScreen
+                )
             }
 
             item{
@@ -141,7 +145,8 @@ fun MedicationScreenPreview(){
     MedicationReminderAppTheme {
         MedicationsScreen(
             onNavigateBack = {},
-            onNavigateToAddMedication = {}
+            onNavigateToAddMedication = {},
+            onNavigateToMedicationDetailsScreen = {}
         )
     }
 }

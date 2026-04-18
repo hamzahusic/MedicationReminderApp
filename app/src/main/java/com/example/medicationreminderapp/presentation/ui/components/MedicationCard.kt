@@ -31,7 +31,10 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medic
 import com.example.medicationreminderapp.presentation.util.formatTime
 
 @Composable
-fun MedicationCard(medication: Medication) {
+fun MedicationCard(
+    medication: Medication,
+    onNavigateToMedicationDetailsScreen: (route:String) -> Unit
+) {
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -88,7 +91,7 @@ fun MedicationCard(medication: Medication) {
                     )
                 }
 
-                IconButton(onClick = { /* Open drawer */ }) {
+                IconButton(onClick = { onNavigateToMedicationDetailsScreen("medication/${medication.id}") }) {
                     Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Medication Details")
                 }
             }

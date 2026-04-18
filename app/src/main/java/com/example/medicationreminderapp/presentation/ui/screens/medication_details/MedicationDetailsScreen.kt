@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -37,9 +36,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.data.medications
-import com.example.medicationreminderapp.presentation.theme.GreenContainer
-import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
+import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.DetailsCard
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
@@ -47,14 +45,19 @@ import com.example.medicationreminderapp.presentation.util.formatTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicationDetailsScreen(medication: Medication) {
+fun MedicationDetailsScreen(
+    id: Int,
+    onNavigateBack: () -> Unit
+) {
+
+    val medication: Medication? = medications.find { it.id == id}
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Medication Details", fontWeight = FontWeight.ExtraBold) },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
                     }
                 },
@@ -73,6 +76,13 @@ fun MedicationDetailsScreen(medication: Medication) {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxHeight()
         ) {
+
+            if(medication == null){
+                EmptyListLabel(
+                    content = "This medication doesn't exist"
+                )
+                return@Column
+            }
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
@@ -102,7 +112,7 @@ fun MedicationDetailsScreen(medication: Medication) {
                             Text(text = "💊", fontSize = 32.sp)
                         }
                         Text(
-                            text = "Paracetamol",
+                            text = medication.name,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 28.sp,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -139,7 +149,11 @@ fun MedicationDetailsScreen(medication: Medication) {
                     letterSpacing = 0.5.sp
                 )
 
-                StausLabel()
+                StausLabel(
+                    isTaken = medication.isTaken,
+                    takenAtHour = medication.takenAtHour,
+                    takenAtMinute = medication.takenAtMinute
+                )
             }
 
             // Bottom action buttons
@@ -192,6 +206,9 @@ fun MedicationDetailsScreen(medication: Medication) {
 @Composable
 fun MedicationDetailsScreenPreview() {
     MedicationReminderAppTheme {
-        MedicationDetailsScreen(medications[0])
+        MedicationDetailsScreen(
+            1,
+            {}
+        )
     }
 }

@@ -1,6 +1,7 @@
 package com.example.medicationreminderapp.presentation.ui.screens.register
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +34,10 @@ import com.example.medicationreminderapp.presentation.ui.components.PasswordInpu
 import com.example.medicationreminderapp.presentation.ui.screens.register.util.isRegistrationFormValid
 
 @Composable
-fun RegisterScreen(){
+fun RegisterScreen(
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit
+){
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -149,7 +153,7 @@ fun RegisterScreen(){
 
 
                 Button(
-                    onClick = {},
+                    onClick = { onNavigateToHome() },
                     modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isValid
@@ -175,7 +179,10 @@ fun RegisterScreen(){
                         text = "Sign in",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable{ onNavigateToLogin() }
+                        ,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -192,6 +199,9 @@ fun RegisterScreen(){
 @Composable
 fun RegisterScreenPreview(){
     MedicationReminderAppTheme() {
-        RegisterScreen()
+        RegisterScreen(
+            onNavigateToHome = {},
+            onNavigateToLogin = {}
+        )
     }
 }

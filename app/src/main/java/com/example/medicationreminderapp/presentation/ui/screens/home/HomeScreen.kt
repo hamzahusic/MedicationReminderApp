@@ -76,7 +76,9 @@ fun HomeScreen(
             Greeting()
             Stats()
             AdherenceStat(progress)
-            UpcomingMedication()
+            UpcomingMedication(
+                onNavigateToMedicationDetailsScreen = onNavigateToScreen
+            )
         }
     }
 }

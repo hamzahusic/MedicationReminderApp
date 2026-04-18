@@ -1,6 +1,7 @@
 package com.example.medicationreminderapp.presentation.ui.screens.home.util
 
 data class Medication(
+    var id: Int,
     var name: String,
     val dosage: String,
     val takeAtHour: Int,

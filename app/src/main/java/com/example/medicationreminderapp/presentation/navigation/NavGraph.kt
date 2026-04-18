@@ -5,9 +5,10 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.medicationreminderapp.data.medications
+import androidx.navigation.navArgument
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.AddMedicationScreen
 import com.example.medicationreminderapp.presentation.ui.screens.history.HistoryScreen
 import com.example.medicationreminderapp.presentation.ui.screens.home.HomeScreen
@@ -48,12 +49,22 @@ fun NavGraph(
             LoginScreen(
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route)
+                },
+                onNavigateToRegister = {
+                    navController.navigate(Screen.Register.route)
                 }
             )
         }
 
         composable(route = Screen.Register.route) {
-            RegisterScreen()
+            RegisterScreen(
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home.route)
+                },
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Login.route)
+                }
+            )
         }
 
         composable(route = Screen.History.route) {
@@ -74,12 +85,28 @@ fun NavGraph(
                 },
                 onNavigateToAddMedication = {
                     navController.navigate(Screen.AddMedication.route)
+                },
+                onNavigateToMedicationDetailsScreen = { route ->
+                    navController.navigate(route)
                 }
             )
         }
 
-        composable(route = Screen.MedicationDetails.route) {
-            MedicationDetailsScreen(medications[0])
+        composable(
+            route = Screen.MedicationDetails.route,
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                }
+            ),
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            MedicationDetailsScreen(
+                id = id,
+                onNavigateBack = {
+                    navController.navigateUp()
+                }
+            )
         }
 
     }

@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,7 +24,9 @@ import com.example.medicationreminderapp.presentation.ui.components.EmptyListLab
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
 
 @Composable
-fun UpcomingMedication() {
+fun UpcomingMedication(
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit
+) {
     Column{
         val filters = listOf("All", "Morning", "Afternoon")
         var selectedFilter by remember { mutableStateOf("All") }
@@ -77,7 +78,10 @@ fun UpcomingMedication() {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(filteredMedications) { medication ->
-                    MedicationCard(medication)
+                    MedicationCard(
+                        medication,
+                        onNavigateToMedicationDetailsScreen
+                    )
                 }
             }
         }

@@ -8,16 +8,16 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.util.Botto
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 
 val todayHistory = listOf<Medication>(
-    Medication("Paracetamol", "500mg", 8,2),
-    Medication("Ibuprofen", "400mg", 14, 2),
-    Medication("Ibuprofen", "400mg", 18, 0),
+    Medication(1, "Paracetamol", "500mg", 8,2, true, 8, 0),
+    Medication(2, "Ibuprofen", "400mg", 14, 2),
+    Medication(3, "Ibuprofen", "400mg", 18, 0),
 )
 
 var medications = listOf<Medication>(
-    Medication("Paracetamol", "500mg", 14, 0),
-    Medication("Ibuprofen", "450mg", 8, 0),
-    Medication("Caffetin", "500mg", 12, 0),
-    Medication("Ibuprofen", "400mg", 18, 0),
+    Medication(1, "Paracetamol", "500mg", 14, 0, true, 14, 0),
+    Medication(2, "Ibuprofen", "450mg", 8, 0),
+    Medication(3, "Caffetin", "500mg", 12, 0),
+    Medication(4, "Ibuprofen", "400mg", 18, 0),
 )
 
 val bottomNavItems = listOf(
