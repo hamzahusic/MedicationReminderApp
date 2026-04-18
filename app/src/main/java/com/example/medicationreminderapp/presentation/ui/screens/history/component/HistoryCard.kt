@@ -21,12 +21,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.RedMissed
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.util.formatTime
 
 @Composable
-fun HistoryCard(medication: Medication, status: Boolean = true) {
-    val statusColor = if (status) GreenTaken else RedMissed
-    val statusLabel = if (status) "TAKEN" else "MISSED"
+fun HistoryCard(medication: Medication) {
+    val statusColor = if (medication.isTaken) GreenTaken else RedMissed
+    val statusLabel = if (medication.isTaken) "TAKEN" else "MISSED"
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -55,7 +56,7 @@ fun HistoryCard(medication: Medication, status: Boolean = true) {
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${medication.takeAt}  -  ${medication.dosage}",
+                    text = "${formatTime(medication.takeAtHour, medication.takeAtMinute)} -  ${medication.dosage}",
                     fontSize = 13.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

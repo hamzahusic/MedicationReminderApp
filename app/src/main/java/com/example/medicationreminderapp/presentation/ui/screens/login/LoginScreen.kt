@@ -1,6 +1,7 @@
 package com.example.medicationreminderapp.presentation.ui.screens.login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,15 +31,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.PasswordInput
+import com.example.medicationreminderapp.presentation.ui.screens.login.util.isLoginFormValid
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    onNavigateToHome: () -> Unit,
+    onNavigateToRegister: () -> Unit
+){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val isValid = !email.isEmpty() && !password.isEmpty()
+    val isValid by remember { derivedStateOf { isLoginFormValid(email, password) } }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -132,8 +138,12 @@ fun LoginScreen(){
 
 
                 Button(
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
+                    onClick = {
+                        onNavigateToHome()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 35.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isValid
                 ) {
@@ -147,7 +157,9 @@ fun LoginScreen(){
 
                 Row(
                     horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth().padding(top = 10.dp)
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp)
                 ) {
                     Text(
                         text = "Don't have an account?",
@@ -158,7 +170,10 @@ fun LoginScreen(){
                         text = "Create one",
                         fontSize = 17.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        modifier = Modifier.padding(start = 5.dp),
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable{ onNavigateToRegister() }
+                        ,
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -175,6 +190,9 @@ fun LoginScreen(){
 @Composable
 fun LoginScreenPreview(){
     MedicationReminderAppTheme() {
-        LoginScreen()
+        LoginScreen(
+            onNavigateToHome = {},
+            onNavigateToRegister = {}
+        )
     }
 }
