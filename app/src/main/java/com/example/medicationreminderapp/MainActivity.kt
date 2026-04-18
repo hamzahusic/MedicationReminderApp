@@ -6,7 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.navigation.compose.rememberNavController
 import com.example.medicationreminderapp.data.medications
+import com.example.medicationreminderapp.presentation.navigation.NavGraph
+import com.example.medicationreminderapp.presentation.navigation.Screen
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.AddMedicationScreen
 import com.example.medicationreminderapp.presentation.ui.screens.history.HistoryScreen
@@ -23,13 +26,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedicationReminderAppTheme {
-//              HomeScreen()
-              MedicationsScreen()
-//              AddMedicationScreen()
-//              MedicationDetailsScreen(medications[0])
-//              LoginScreen()
-//              RegisterScreen()
-//              HistoryScreen()
+
+                val navController = rememberNavController()
+
+                NavGraph(
+                    navController = navController,
+                    startDestination = Screen.Login.route
+                )
+
             }
         }
     }

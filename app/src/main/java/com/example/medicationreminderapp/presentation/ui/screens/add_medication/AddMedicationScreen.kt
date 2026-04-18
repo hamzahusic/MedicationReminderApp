@@ -38,7 +38,9 @@ import com.example.medicationreminderapp.presentation.ui.screens.add_medication.
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddMedicationScreen(){
+fun AddMedicationScreen(
+    onNavigateBack: () -> Unit
+){
 
     var name by remember { mutableStateOf("") }
     var dosage by remember { mutableStateOf("") }
@@ -52,13 +54,14 @@ fun AddMedicationScreen(){
             CenterAlignedTopAppBar(
                 title = { Text("Add Medication", fontWeight = FontWeight.ExtraBold)},
                 navigationIcon = {
-                    IconButton(onClick = { /* Open drawer */ }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Menu")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
-                )
+                ),
+
             )
         },
         containerColor = MaterialTheme.colorScheme.background,
@@ -149,6 +152,8 @@ fun AddMedicationScreen(){
 @Composable
 fun AddMedicationScreenPreview(){
     MedicationReminderAppTheme {
-        AddMedicationScreen()
+        AddMedicationScreen(
+            onNavigateBack = {}
+        )
     }
 }

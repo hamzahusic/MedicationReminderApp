@@ -33,7 +33,9 @@ import com.example.medicationreminderapp.presentation.ui.components.PasswordInpu
 import com.example.medicationreminderapp.presentation.ui.screens.login.util.isLoginFormValid
 
 @Composable
-fun LoginScreen(){
+fun LoginScreen(
+    onNavigateToHome: () -> Unit
+){
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -134,7 +136,9 @@ fun LoginScreen(){
 
 
                 Button(
-                    onClick = {},
+                    onClick = {
+                        onNavigateToHome()
+                    },
                     modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isValid
@@ -177,6 +181,8 @@ fun LoginScreen(){
 @Composable
 fun LoginScreenPreview(){
     MedicationReminderAppTheme() {
-        LoginScreen()
+        LoginScreen(
+            onNavigateToHome = {}
+        )
     }
 }

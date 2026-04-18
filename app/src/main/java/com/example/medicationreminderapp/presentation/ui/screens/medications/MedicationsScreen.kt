@@ -39,17 +39,19 @@ import com.example.medicationreminderapp.presentation.ui.screens.medications.com
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicationsScreen(){
-
+fun MedicationsScreen(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddMedication: () -> Unit
+){
     var inputText by remember { mutableStateOf("") }
     var filteredMedication by remember { mutableStateOf(medications) }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("My Medications", fontWeight = FontWeight.ExtraBold) },
+                title = { Text("Medications", fontWeight = FontWeight.ExtraBold) },
                 navigationIcon = {
-                    IconButton(onClick = { /* Open drawer */ }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Menu")
                     }
                 },
@@ -108,7 +110,7 @@ fun MedicationsScreen(){
 
             item{
                 Button(
-                    onClick = {},
+                    onClick = { onNavigateToAddMedication() },
                     modifier =
                         Modifier
                             .fillMaxWidth()
@@ -137,6 +139,9 @@ fun MedicationsScreen(){
 @Composable
 fun MedicationScreenPreview(){
     MedicationReminderAppTheme {
-        MedicationsScreen()
+        MedicationsScreen(
+            onNavigateBack = {},
+            onNavigateToAddMedication = {}
+        )
     }
 }
