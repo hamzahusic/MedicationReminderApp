@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,21 +35,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.presentation.theme.GreenContainer
-import com.example.medicationreminderapp.presentation.theme.GreenTaken
+import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
+import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.DetailsCard
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
+import com.example.medicationreminderapp.presentation.util.formatTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MedicationDetailsScreen() {
+fun MedicationDetailsScreen(
+    id: Int,
+    onNavigateBack: () -> Unit
+) {
+
+    val medication: Medication? = medications.find { it.id == id}
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Medication Details", fontWeight = FontWeight.ExtraBold) },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Back")
                     }
                 },
@@ -68,6 +76,13 @@ fun MedicationDetailsScreen() {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxHeight()
         ) {
+
+            if(medication == null){
+                EmptyListLabel(
+                    content = "This medication doesn't exist"
+                )
+                return@Column
+            }
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
@@ -97,7 +112,7 @@ fun MedicationDetailsScreen() {
                             Text(text = "💊", fontSize = 32.sp)
                         }
                         Text(
-                            text = "Paracetamol",
+                            text = medication.name,
                             fontWeight = FontWeight.ExtraBold,
                             fontSize = 28.sp,
                             color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -116,61 +131,12 @@ fun MedicationDetailsScreen() {
                 }
 
                 // Stat cards row
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Card(
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "DOSAGE",
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 11.sp,
-                                letterSpacing = 0.5.sp
-                            )
-                            Text(
-                                text = "500mg",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    item{
+                        DetailsCard("DOSAGE", medication.dosage, Modifier.fillParentMaxWidth(0.5f))
                     }
-
-                    Card(
-                        shape = RoundedCornerShape(20.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
-                        ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(4.dp)
-                        ) {
-                            Text(
-                                text = "DOSAGE TIME",
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                fontSize = 11.sp,
-                                letterSpacing = 0.5.sp
-                            )
-                            Text(
-                                text = "14:00",
-                                fontSize = 26.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                    item{
+                        DetailsCard("DOSAGE TIME", formatTime(medication.takeAtHour, medication.takeAtMinute), Modifier.fillParentMaxWidth(0.5f))
                     }
                 }
 
@@ -183,7 +149,11 @@ fun MedicationDetailsScreen() {
                     letterSpacing = 0.5.sp
                 )
 
-                StausLabel()
+                StausLabel(
+                    isTaken = medication.isTaken,
+                    takenAtHour = medication.takenAtHour,
+                    takenAtMinute = medication.takenAtMinute
+                )
             }
 
             // Bottom action buttons
@@ -236,6 +206,9 @@ fun MedicationDetailsScreen() {
 @Composable
 fun MedicationDetailsScreenPreview() {
     MedicationReminderAppTheme {
-        MedicationDetailsScreen()
+        MedicationDetailsScreen(
+            1,
+            {}
+        )
     }
 }

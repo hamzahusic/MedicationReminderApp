@@ -25,27 +25,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.medicationreminderapp.presentation.navigation.Screen
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.AdherenceStat
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.Greeting
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.Stats
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.UpcomingMedication
+import com.example.medicationreminderapp.presentation.ui.components.AppBottomBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToScreen: (route:String) -> Unit
+) {
     var progress by remember { mutableFloatStateOf(0.66f) }
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Home", fontWeight = FontWeight.ExtraBold) },
-                navigationIcon = {
-                    IconButton(onClick = { /* Open drawer */ }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menu")
-                    }
-                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 )
@@ -53,11 +52,17 @@ fun HomeScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Action */ },
+                onClick = { onNavigateToScreen(Screen.AddMedication.route)},
                 containerColor = MaterialTheme.colorScheme.primary
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
+        },
+        bottomBar = {
+            AppBottomBar(
+                currentRoute = Screen.Home.route,
+                onNavigate = { route -> onNavigateToScreen(route)}
+            )
         },
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -71,7 +76,9 @@ fun HomeScreen() {
             Greeting()
             Stats()
             AdherenceStat(progress)
-            UpcomingMedication()
+            UpcomingMedication(
+                onNavigateToMedicationDetailsScreen = onNavigateToScreen
+            )
         }
     }
 }
@@ -80,6 +87,8 @@ fun HomeScreen() {
 @Composable
 fun HomeScreenPreview() {
     MedicationReminderAppTheme {
-        HomeScreen()
+        HomeScreen(
+            {}
+        )
     }
 }

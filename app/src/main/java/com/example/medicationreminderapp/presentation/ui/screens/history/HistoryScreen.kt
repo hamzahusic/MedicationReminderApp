@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -28,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.data.todayHistory
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.HistoryCard
-import com.example.medicationreminderapp.presentation.ui.screens.home.component.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.WeekCalendar
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.AdherenceOverviewCard
 import java.time.LocalDate
@@ -39,8 +40,11 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen() {
-    val uploadProgress by remember { mutableStateOf(0.70f) }
+fun HistoryScreen(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddMedication: () -> Unit
+) {
+    val uploadProgress by remember { mutableFloatStateOf(0.70f) }
     val today = LocalDate.now()
     var selectedDate by remember { mutableStateOf(today) }
 
@@ -55,7 +59,7 @@ fun HistoryScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(
                             Icons.Default.KeyboardArrowLeft,
                             contentDescription = "Back",
@@ -70,7 +74,7 @@ fun HistoryScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { },
+                onClick = { onNavigateToAddMedication() },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
@@ -111,11 +115,6 @@ fun HistoryScreen() {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-            val todayHistory = listOf<Medication>(
-                Medication("Paracetamol", "500mg", "08:02"),
-                Medication("Ibuprofen", "400mg", "14:02"),
-                Medication("Ibuprofen", "400mg", "18:00"),
-            )
 
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
 
@@ -125,8 +124,8 @@ fun HistoryScreen() {
                     )
                 }
 
-                todayHistory.forEachIndexed { index, medication ->
-                    HistoryCard(medication, status = index != 1)
+                todayHistory.forEach { medication ->
+                    HistoryCard(medication)
                 }
             }
         }
@@ -138,6 +137,9 @@ fun HistoryScreen() {
 @Composable
 fun HistoryScreenPreview() {
     MedicationReminderAppTheme {
-        HistoryScreen()
+        HistoryScreen(
+            onNavigateBack = {},
+            onNavigateToAddMedication = {}
+        )
     }
 }
