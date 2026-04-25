@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -52,6 +54,12 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.ui)
     implementation("androidx.navigation:navigation-compose:${nav_version}")
+    // Hilt core library
+    implementation("com.google.dagger:hilt-android:2.59.2")
+    // Hilt annotation processor (KSP)
+    ksp("com.google.dagger:hilt-android-compiler:2.59.2")
+    // Hilt + Jetpack Navigation Compose integration
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

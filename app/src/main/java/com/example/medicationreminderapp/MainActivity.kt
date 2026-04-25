@@ -18,7 +18,9 @@ import com.example.medicationreminderapp.presentation.ui.screens.login.LoginScre
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.MedicationDetailsScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medications.MedicationsScreen
 import com.example.medicationreminderapp.presentation.ui.screens.register.RegisterScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
