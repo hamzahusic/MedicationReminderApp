@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +46,11 @@ fun MedicationsScreen(
     onNavigateToMedicationDetailsScreen: (route:String) -> Unit
 ){
     var inputText by remember { mutableStateOf("") }
-    var filteredMedication by remember { mutableStateOf(medications) }
+    val filteredMedication by remember {
+        derivedStateOf {
+            medications.filter { it.name.lowercase().contains(inputText.lowercase()) }
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -73,12 +78,7 @@ fun MedicationsScreen(
         ) {
 
             item{
-                SearchBar(inputText, {
-                    input -> inputText = input
-                            filteredMedication = medications.filter {
-                                it.name.lowercase().contains(input.lowercase())
-                            }
-                })
+                SearchBar(inputText, { input -> inputText = input })
             }
 
             item{

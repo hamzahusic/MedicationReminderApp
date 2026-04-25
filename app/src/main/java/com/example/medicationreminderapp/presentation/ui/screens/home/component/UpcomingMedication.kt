@@ -11,6 +11,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,7 +31,17 @@ fun UpcomingMedication(
     Column{
         val filters = listOf("All", "Morning", "Afternoon")
         var selectedFilter by remember { mutableStateOf("All") }
-        var filteredMedications by remember { mutableStateOf(medications) }
+        val filteredMedications by remember {
+            derivedStateOf {
+                medications.filter {
+                    when (selectedFilter) {
+                        "Morning" -> it.takeAtHour < 12
+                        "Afternoon" -> it.takeAtHour >= 12
+                        else -> true
+                    }
+                }
+            }
+        }
 
         Text(
             text = "UPCOMING",
@@ -48,16 +59,7 @@ fun UpcomingMedication(
                 items(filters) { filter ->
                     FilterChip(
                         selected = selectedFilter == filter,
-                        onClick = {
-                            selectedFilter = filter
-                            filteredMedications = medications.filter {
-                                when (filter) {
-                                    "Morning" -> it.takeAtHour < 12
-                                    "Afternoon" -> it.takeAtHour >= 12
-                                    else -> true
-                                }
-                            }
-                        },
+                        onClick = { selectedFilter = filter },
                         label = { Text(filter) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
