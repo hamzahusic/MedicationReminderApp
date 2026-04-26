@@ -46,6 +46,36 @@ fun RegisterScreen(
 
     val isValid by remember { derivedStateOf { isRegistrationFormValid(username, email, password) } }
 
+    RegisterScreenContent(
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToLogin = onNavigateToLogin,
+        username = username,
+        onUsernameChange = { updated -> username = updated },
+        email = email,
+        onEmailChange = { updated -> email = updated },
+        password = password,
+        onPasswordChange = { updated -> password = updated},
+        passwordVisible = passwordVisible,
+        setIsPasswordVisible = { passwordVisible = !passwordVisible },
+        isValid = isValid
+    )
+
+}
+
+@Composable
+fun RegisterScreenContent(
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    username: String,
+    onUsernameChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    setIsPasswordVisible: () -> Unit,
+    isValid: Boolean
+){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -115,7 +145,7 @@ fun RegisterScreen(
 
                 TextField(
                     value = username,
-                    onValueChange = { username = it },
+                    onValueChange = { onUsernameChange(it) },
                     placeholder = { Text("John Doe") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -130,7 +160,7 @@ fun RegisterScreen(
 
                 TextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { onEmailChange(it) },
                     placeholder = { Text("john.doe@gmail.com") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,8 +177,8 @@ fun RegisterScreen(
                 PasswordInput(
                     password,
                     passwordVisible,
-                    { passwordVisible = !passwordVisible },
-                    { updated -> password = updated }
+                    { setIsPasswordVisible() },
+                    { updated -> onPasswordChange(updated) }
                 )
 
 
@@ -192,7 +222,6 @@ fun RegisterScreen(
 
         }
     }
-
 }
 
 @Preview

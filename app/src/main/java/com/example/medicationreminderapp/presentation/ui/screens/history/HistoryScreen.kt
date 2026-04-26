@@ -38,16 +38,37 @@ import com.example.medicationreminderapp.presentation.ui.screens.history.compone
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit
 ) {
     val uploadProgress by remember { mutableFloatStateOf(0.70f) }
-    val today = LocalDate.now()
+    val today = remember { LocalDate.now() }
     var selectedDate by remember { mutableStateOf(today) }
 
+    HistoryScreenContent(
+        onNavigateBack = onNavigateBack,
+        onNavigateToAddMedication = onNavigateToAddMedication,
+        uploadProgress = uploadProgress,
+        selectedDate = selectedDate,
+        onSelectedDate = { updated -> selectedDate = updated },
+        today = today
+    )
+
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HistoryScreenContent(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddMedication: () -> Unit,
+    uploadProgress: Float,
+    selectedDate: LocalDate,
+    onSelectedDate : (LocalDate) -> Unit,
+    today: LocalDate
+){
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -103,8 +124,8 @@ fun HistoryScreen(
 
             WeekCalendar(
                 selectedDate = selectedDate,
-                onDateSelected = { selectedDate = it },
-                onClear = { selectedDate = today }
+                onDateSelected = { onSelectedDate(it) },
+                onClear = { onSelectedDate(today) }
             )
 
             Text(

@@ -52,6 +52,19 @@ fun MedicationDetailsScreen(
 
     val medication: Medication? = medications.find { it.id == id}
 
+    MedicationDetailsScreenContent(
+        onNavigateBack = onNavigateBack,
+        medication = medication
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MedicationDetailsScreenContent(
+    onNavigateBack: () -> Unit,
+    medication : Medication?
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(

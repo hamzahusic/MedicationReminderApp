@@ -49,6 +49,35 @@ fun AddMedicationScreen(
 
     val isValid by remember { derivedStateOf { isAddMedicationFormValid(name, dosage) } }
 
+    AddMedicationScreenContent(
+        onNavigateBack = onNavigateBack,
+        name = name,
+        onNameChange = { updated -> name = updated },
+        dosage = dosage,
+        onDosageChange = { updated -> dosage = updated },
+        selectedHour = selectedHour,
+        selectedMinute = selectedMinute,
+        isValid = isValid,
+        onSelectedHour = { updated -> selectedHour = updated },
+        onSelectedMinute = { updated -> selectedMinute = updated }
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddMedicationScreenContent(
+    onNavigateBack: () -> Unit,
+    name: String,
+    onNameChange: (String) -> Unit,
+    dosage : String,
+    onDosageChange: (String) -> Unit,
+    selectedHour: Int,
+    selectedMinute : Int,
+    isValid : Boolean,
+    onSelectedHour : (Int) -> Unit,
+    onSelectedMinute : (Int) -> Unit
+){
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -62,7 +91,7 @@ fun AddMedicationScreen(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
 
-            )
+                )
         },
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -82,7 +111,7 @@ fun AddMedicationScreen(
 
             TextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = { onNameChange(it) },
                 label = { Text("Paracetamol") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -96,7 +125,7 @@ fun AddMedicationScreen(
             )
             TextField(
                 value = dosage,
-                onValueChange = { dosage = it },
+                onValueChange = { onDosageChange(it) },
                 label = { Text("500mg") },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,8 +143,8 @@ fun AddMedicationScreen(
             ) {
                 FirstDoseTimePicker(
                     onTimeSelected = { hour, minute ->
-                        selectedHour = hour
-                        selectedMinute = minute
+                        onSelectedHour(hour)
+                        onSelectedMinute(minute)
                     }
                 )
 

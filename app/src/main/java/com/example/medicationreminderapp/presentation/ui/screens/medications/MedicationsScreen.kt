@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.medications.component.SearchBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,6 +53,28 @@ fun MedicationsScreen(
         }
     }
 
+    MedicationsScreenContent(
+        onNavigateBack = onNavigateBack,
+        onNavigateToAddMedication = onNavigateToAddMedication,
+        onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
+        inputText = inputText,
+        onInputTextChange = { updated -> inputText = updated},
+        filteredMedication = filteredMedication
+    )
+
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MedicationsScreenContent(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddMedication: () -> Unit,
+    onNavigateToMedicationDetailsScreen: (route:String) -> Unit,
+    inputText: String,
+    onInputTextChange : (String) -> Unit,
+    filteredMedication: List<Medication>
+){
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -78,7 +101,7 @@ fun MedicationsScreen(
         ) {
 
             item{
-                SearchBar(inputText, { input -> inputText = input })
+                SearchBar(inputText, { input -> onInputTextChange(input) })
             }
 
             item{

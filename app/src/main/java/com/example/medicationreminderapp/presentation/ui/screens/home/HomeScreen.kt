@@ -34,13 +34,25 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.component.
 import com.example.medicationreminderapp.presentation.ui.components.AppBottomBar
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNavigateToScreen: (route:String) -> Unit
 ) {
     var progress by remember { mutableFloatStateOf(0.66f) }
 
+    HomeScreenContent(
+        onNavigateToScreen,
+        progress
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeScreenContent(
+    onNavigateToScreen: (route:String) -> Unit,
+    progress: Float
+){
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(

@@ -45,6 +45,32 @@ fun LoginScreen(
 
     val isValid by remember { derivedStateOf { isLoginFormValid(email, password) } }
 
+    LoginScreenContent(
+        email = email,
+        onEmailChange = { updated -> email = updated },
+        password = password,
+        onPasswordChange = { updated -> password = updated},
+        passwordVisible = passwordVisible,
+        setIsPasswordVisible = { passwordVisible = !passwordVisible },
+        onNavigateToHome = onNavigateToHome,
+        onNavigateToRegister = onNavigateToRegister,
+        isValid = isValid
+    )
+
+}
+
+@Composable
+private fun LoginScreenContent(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    setIsPasswordVisible: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToRegister: () -> Unit,
+    isValid: Boolean
+){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -116,7 +142,7 @@ fun LoginScreen(
 
                 TextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { onEmailChange(it) },
                     placeholder = { Text("john.doe@gmail.com") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -132,8 +158,8 @@ fun LoginScreen(
                 PasswordInput(
                     password,
                     passwordVisible,
-                    { passwordVisible = !passwordVisible },
-                    { updated -> password = updated }
+                    { setIsPasswordVisible() },
+                    { updated -> onPasswordChange(updated)}
                 )
 
 
@@ -183,7 +209,6 @@ fun LoginScreen(
 
         }
     }
-
 }
 
 @Preview
