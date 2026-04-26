@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.navigation.Screen
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.AdherenceStat
@@ -32,18 +34,44 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.component.
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.Stats
 import com.example.medicationreminderapp.presentation.ui.screens.home.component.UpcomingMedication
 import com.example.medicationreminderapp.presentation.ui.components.AppBottomBar
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
+import com.example.medicationreminderapp.presentation.view_model.home.HomeUiState
+import com.example.medicationreminderapp.presentation.view_model.home.HomeViewModel
 
 
 @Composable
 fun HomeScreen(
+    viewModel: HomeViewModel,
     onNavigateToScreen: (route:String) -> Unit
 ) {
-    var progress by remember { mutableFloatStateOf(0.66f) }
 
-    HomeScreenContent(
-        onNavigateToScreen,
-        progress
-    )
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val state = uiState) {
+        is HomeUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is HomeUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is HomeUiState.Success -> {
+            HomeScreenContent(
+                onNavigateToScreen,
+                progress = state.progress,
+                medications = state.medications
+            )
+        }
+        else -> {
+            //no-op
+        }
+    }
 
 }
 
@@ -51,7 +79,8 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenContent(
     onNavigateToScreen: (route:String) -> Unit,
-    progress: Float
+    progress: Float,
+    medications: List<Medication>
 ){
     Scaffold(
         topBar = {
@@ -89,7 +118,8 @@ private fun HomeScreenContent(
             Stats()
             AdherenceStat(progress)
             UpcomingMedication(
-                onNavigateToMedicationDetailsScreen = onNavigateToScreen
+                onNavigateToMedicationDetailsScreen = onNavigateToScreen,
+                medications = medications
             )
         }
     }
@@ -100,6 +130,7 @@ private fun HomeScreenContent(
 fun HomeScreenPreview() {
     MedicationReminderAppTheme {
         HomeScreen(
+            viewModel = hiltViewModel(),
             {}
         )
     }

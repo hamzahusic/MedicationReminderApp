@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 
                 NavGraph(
                     navController = navController,
-                    startDestination = Screen.Login.route
+                    startDestination = Screen.Home.route
                 )
 
             }

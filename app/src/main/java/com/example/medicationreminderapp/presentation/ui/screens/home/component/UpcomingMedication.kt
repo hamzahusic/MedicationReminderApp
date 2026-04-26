@@ -20,13 +20,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 
 @Composable
 fun UpcomingMedication(
-    onNavigateToMedicationDetailsScreen: (route: String) -> Unit
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
+    medications: List<Medication>
 ) {
     Column{
         val filters = listOf("All", "Morning", "Afternoon")
