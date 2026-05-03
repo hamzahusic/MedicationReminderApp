@@ -33,36 +33,55 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medications.component.SearchBar
+import com.example.medicationreminderapp.presentation.view_model.medications.MedicationsUiState
+import com.example.medicationreminderapp.presentation.view_model.medications.MedicationsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationsScreen(
+    viewModel: MedicationsViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit,
     onNavigateToMedicationDetailsScreen: (route:String) -> Unit
 ){
-    var inputText by remember { mutableStateOf("") }
-    val filteredMedication by remember {
-        derivedStateOf {
-            medications.filter { it.name.lowercase().contains(inputText.lowercase()) }
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val state = uiState) {
+        is MedicationsUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is MedicationsUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is MedicationsUiState.Success -> {
+            MedicationsScreenContent(
+                onNavigateBack = onNavigateBack,
+                onNavigateToAddMedication = onNavigateToAddMedication,
+                onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
+                inputText = state.inputText,
+                onInputTextChange = viewModel::onInputTextChange,
+                filteredMedication = state.medications
+            )
+        }
+        else -> {
+            //no-op
         }
     }
-
-    MedicationsScreenContent(
-        onNavigateBack = onNavigateBack,
-        onNavigateToAddMedication = onNavigateToAddMedication,
-        onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
-        inputText = inputText,
-        onInputTextChange = { updated -> inputText = updated},
-        filteredMedication = filteredMedication
-    )
-
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -167,6 +186,7 @@ fun MedicationsScreenContent(
 fun MedicationScreenPreview(){
     MedicationReminderAppTheme {
         MedicationsScreen(
+            viewModel = hiltViewModel(),
             onNavigateBack = {},
             onNavigateToAddMedication = {},
             onNavigateToMedicationDetailsScreen = {}

@@ -82,6 +82,7 @@ fun NavGraph(
 
         composable(route = Screen.Medications.route) {
             MedicationsScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
