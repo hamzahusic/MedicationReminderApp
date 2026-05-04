@@ -20,42 +20,63 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.data.todayHistory
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.history.component.AdherenceOverviewCard
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.HistoryCard
 import com.example.medicationreminderapp.presentation.ui.screens.history.component.WeekCalendar
-import com.example.medicationreminderapp.presentation.ui.screens.history.component.AdherenceOverviewCard
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
+import com.example.medicationreminderapp.presentation.view_model.history.HistoryUiState
+import com.example.medicationreminderapp.presentation.view_model.history.HistoryViewModel
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HistoryScreen(
+    viewModel: HistoryViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit
 ) {
-    val uploadProgress by remember { mutableFloatStateOf(0.70f) }
-    val today = remember { LocalDate.now() }
-    var selectedDate by remember { mutableStateOf(today) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    HistoryScreenContent(
-        onNavigateBack = onNavigateBack,
-        onNavigateToAddMedication = onNavigateToAddMedication,
-        uploadProgress = uploadProgress,
-        selectedDate = selectedDate,
-        onSelectedDate = { updated -> selectedDate = updated },
-        today = today
-    )
+    when (val state = uiState) {
+        is HistoryUiState.Loading -> {
+            LoadingScreen()
+        }
 
+        is HistoryUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is HistoryUiState.Success -> {
+            HistoryScreenContent(
+                onNavigateBack = onNavigateBack,
+                onNavigateToAddMedication = onNavigateToAddMedication,
+                progress = state.progress,
+                selectedDate = state.selectedDate,
+                today = state.today,
+                medications = state.medications,
+                onDateSelected = viewModel::onDateSelected,
+                onClearDate = viewModel::onClearDate
+            )
+        }
+
+        else -> {
+            //no-op
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -64,11 +85,13 @@ fun HistoryScreen(
 private fun HistoryScreenContent(
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit,
-    uploadProgress: Float,
+    progress: Float,
     selectedDate: LocalDate,
-    onSelectedDate : (LocalDate) -> Unit,
-    today: LocalDate
-){
+    today: LocalDate,
+    medications: List<Medication>,
+    onDateSelected: (LocalDate) -> Unit,
+    onClearDate: () -> Unit
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -111,8 +134,7 @@ private fun HistoryScreenContent(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-
-            AdherenceOverviewCard(uploadProgress)
+            AdherenceOverviewCard(progress)
 
             Text(
                 text = "CALENDAR",
@@ -124,8 +146,8 @@ private fun HistoryScreenContent(
 
             WeekCalendar(
                 selectedDate = selectedDate,
-                onDateSelected = { onSelectedDate(it) },
-                onClear = { onSelectedDate(today) }
+                onDateSelected = { onDateSelected(it) },
+                onClear = { onClearDate() }
             )
 
             Text(
@@ -136,16 +158,12 @@ private fun HistoryScreenContent(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
-
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-
-                if(todayHistory.isEmpty()){
-                    EmptyListLabel(
-                        content = "No medication on this day"
-                    )
+                if (medications.isEmpty()) {
+                    EmptyListLabel(content = "No medication on this day")
                 }
 
-                todayHistory.forEach { medication ->
+                medications.forEach { medication ->
                     HistoryCard(medication)
                 }
             }
@@ -159,6 +177,7 @@ private fun HistoryScreenContent(
 fun HistoryScreenPreview() {
     MedicationReminderAppTheme {
         HistoryScreen(
+            viewModel = hiltViewModel(),
             onNavigateBack = {},
             onNavigateToAddMedication = {}
         )

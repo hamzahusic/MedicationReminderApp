@@ -41,6 +41,7 @@ fun NavGraph(
 
         composable(route = Screen.AddMedication.route) {
             AddMedicationScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 }
@@ -71,6 +72,7 @@ fun NavGraph(
 
         composable(route = Screen.History.route) {
             HistoryScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
@@ -102,10 +104,9 @@ fun NavGraph(
                     type = NavType.IntType
                 }
             ),
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: 0
+        ) {
             MedicationDetailsScreen(
-                id = id,
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 }
