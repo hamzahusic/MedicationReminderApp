@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,15 +30,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.PasswordInput
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
 import com.example.medicationreminderapp.presentation.ui.screens.login.util.isLoginFormValid
+import com.example.medicationreminderapp.presentation.view_model.auth.login.LoginNavigationEvent
+import com.example.medicationreminderapp.presentation.view_model.auth.login.LoginUiState
+import com.example.medicationreminderapp.presentation.view_model.auth.login.LoginViewModel
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel,
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit
 ){
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -45,17 +57,33 @@ fun LoginScreen(
 
     val isValid by remember { derivedStateOf { isLoginFormValid(email, password) } }
 
-    LoginScreenContent(
-        email = email,
-        onEmailChange = { updated -> email = updated },
-        password = password,
-        onPasswordChange = { updated -> password = updated},
-        passwordVisible = passwordVisible,
-        setIsPasswordVisible = { passwordVisible = !passwordVisible },
-        onNavigateToHome = onNavigateToHome,
-        onNavigateToRegister = onNavigateToRegister,
-        isValid = isValid
-    )
+
+    when (val state = uiState) {
+        is LoginUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is LoginUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        else -> {
+            LoginScreenContent(
+                email = email,
+                onEmailChange = { updated -> email = updated },
+                password = password,
+                onPasswordChange = { updated -> password = updated},
+                passwordVisible = passwordVisible,
+                setIsPasswordVisible = { passwordVisible = !passwordVisible },
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToRegister = onNavigateToRegister,
+                isValid = isValid
+            )
+        }
+    }
 
 }
 
@@ -216,6 +244,7 @@ private fun LoginScreenContent(
 fun LoginScreenPreview(){
     MedicationReminderAppTheme() {
         LoginScreen(
+            viewModel = hiltViewModel(),
             onNavigateToHome = {},
             onNavigateToRegister = {}
         )

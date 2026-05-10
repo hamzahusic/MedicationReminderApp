@@ -50,6 +50,7 @@ fun NavGraph(
 
         composable(route = Screen.Login.route) {
             LoginScreen(
+                viewModel = hiltViewModel(),
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route)
                 },
