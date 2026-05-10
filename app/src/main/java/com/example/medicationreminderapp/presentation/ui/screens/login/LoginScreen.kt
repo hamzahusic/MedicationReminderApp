@@ -70,6 +70,10 @@ fun LoginScreen(
             )
         }
 
+        is LoginUiState.Success -> {
+            onNavigateToHome()
+        }
+
         else -> {
             LoginScreenContent(
                 email = email,
@@ -80,7 +84,8 @@ fun LoginScreen(
                 setIsPasswordVisible = { passwordVisible = !passwordVisible },
                 onNavigateToHome = onNavigateToHome,
                 onNavigateToRegister = onNavigateToRegister,
-                isValid = isValid
+                isValid = isValid,
+                onLoginClick = { viewModel.onLoginClick(email, password) }
             )
         }
     }
@@ -97,7 +102,8 @@ private fun LoginScreenContent(
     setIsPasswordVisible: () -> Unit,
     onNavigateToHome: () -> Unit,
     onNavigateToRegister: () -> Unit,
-    isValid: Boolean
+    isValid: Boolean,
+    onLoginClick: () -> Unit
 ){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -193,7 +199,7 @@ private fun LoginScreenContent(
 
                 Button(
                     onClick = {
-                        onNavigateToHome()
+                        onLoginClick()
                     },
                     modifier = Modifier
                         .fillMaxWidth()

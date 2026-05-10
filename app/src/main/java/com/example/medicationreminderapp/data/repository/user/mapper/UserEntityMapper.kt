@@ -5,6 +5,7 @@ import com.example.medicationreminderapp.presentation.view_model.auth.util.Regis
 
 fun RegisterUserData.toUserEntity(): UserEntity {
     return UserEntity(
+        username = username,
         email = email,
         passwordHash = password
     )

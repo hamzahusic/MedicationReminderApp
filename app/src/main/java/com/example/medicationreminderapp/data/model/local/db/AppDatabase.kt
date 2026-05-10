@@ -9,7 +9,7 @@ import com.example.medicationreminderapp.data.model.local.entity.UserEntity
     entities = [
         UserEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
