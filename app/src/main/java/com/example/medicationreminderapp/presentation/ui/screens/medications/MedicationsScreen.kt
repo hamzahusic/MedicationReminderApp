@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
 import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
@@ -75,7 +74,8 @@ fun MedicationsScreen(
                 onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
                 inputText = state.inputText,
                 onInputTextChange = viewModel::onInputTextChange,
-                filteredMedication = state.medications
+                filteredMedication = state.medications,
+                hasAnyMedication = state.medications.isNotEmpty() || state.inputText.isNotEmpty()
             )
         }
         else -> {
@@ -89,11 +89,12 @@ fun MedicationsScreen(
 fun MedicationsScreenContent(
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit,
-    onNavigateToMedicationDetailsScreen: (route:String) -> Unit,
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
     inputText: String,
-    onInputTextChange : (String) -> Unit,
-    filteredMedication: List<Medication>
-){
+    onInputTextChange: (String) -> Unit,
+    filteredMedication: List<Medication>,
+    hasAnyMedication: Boolean
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -133,14 +134,12 @@ fun MedicationsScreenContent(
             }
 
 
-            if (filteredMedication.isEmpty() && medications.isNotEmpty()){
-                item{
-                    EmptyListLabel(
-                        content = "No medication found"
-                    )
+            if (filteredMedication.isEmpty() && hasAnyMedication) {
+                item {
+                    EmptyListLabel(content = "No medication found")
                 }
-            } else if(medications.isEmpty()){
-                item{
+            } else if (!hasAnyMedication) {
+                item {
                     EmptyListLabel()
                 }
             }

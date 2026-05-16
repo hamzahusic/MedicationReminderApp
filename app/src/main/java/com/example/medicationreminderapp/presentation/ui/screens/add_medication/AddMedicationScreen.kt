@@ -19,22 +19,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.screens.add_medication.component.FirstDoseTimePicker
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
+import com.example.medicationreminderapp.presentation.view_model.add_medication.AddMedicationNavigationEvent
 import com.example.medicationreminderapp.presentation.view_model.add_medication.AddMedicationUiState
 import com.example.medicationreminderapp.presentation.view_model.add_medication.AddMedicationViewModel
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddMedicationScreen(
     viewModel: AddMedicationViewModel,
@@ -42,24 +41,37 @@ fun AddMedicationScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is AddMedicationNavigationEvent.NavigateBack -> onNavigateBack()
+            }
+        }
+    }
+
     when (val state = uiState) {
-        is AddMedicationUiState.Success -> {
-            AddMedicationScreenContent(
-                onNavigateBack = onNavigateBack,
-                name = state.name,
-                onNameChange = viewModel::onNameChange,
-                dosage = state.dosage,
-                onDosageChange = viewModel::onDosageChange,
-                selectedHour = state.selectedHour,
-                selectedMinute = state.selectedMinute,
-                isValid = state.isValid,
-                onSelectedHour = viewModel::onHourChange,
-                onSelectedMinute = viewModel::onMinuteChange
-            )
-        }
-        else -> {
-            //no-op
-        }
+        is AddMedicationUiState.Loading -> LoadingScreen()
+
+        is AddMedicationUiState.Error -> ErrorScreen(
+            message = state.message,
+            onRetryClick = { viewModel.resetUiState() }
+        )
+
+        is AddMedicationUiState.Success -> AddMedicationScreenContent(
+            onNavigateBack = onNavigateBack,
+            name = state.name,
+            onNameChange = viewModel::onNameChange,
+            dosage = state.dosage,
+            onDosageChange = viewModel::onDosageChange,
+            selectedHour = state.selectedHour,
+            selectedMinute = state.selectedMinute,
+            isValid = state.isValid,
+            onSelectedHour = viewModel::onHourChange,
+            onSelectedMinute = viewModel::onMinuteChange,
+            onSaveClick = viewModel::onSaveClick
+        )
+
+        else -> Unit
     }
 }
 
@@ -75,7 +87,8 @@ fun AddMedicationScreenContent(
     selectedMinute: Int,
     isValid: Boolean,
     onSelectedHour: (Int) -> Unit,
-    onSelectedMinute: (Int) -> Unit
+    onSelectedMinute: (Int) -> Unit,
+    onSaveClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -153,7 +166,7 @@ fun AddMedicationScreenContent(
             }
 
             Button(
-                onClick = {},
+                onClick = onSaveClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp),
@@ -167,16 +180,5 @@ fun AddMedicationScreenContent(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun AddMedicationScreenPreview() {
-    MedicationReminderAppTheme {
-        AddMedicationScreen(
-            viewModel = hiltViewModel(),
-            onNavigateBack = {}
-        )
     }
 }

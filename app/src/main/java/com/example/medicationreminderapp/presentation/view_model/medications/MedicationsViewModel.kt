@@ -2,20 +2,27 @@ package com.example.medicationreminderapp.presentation.view_model.medications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.medicationreminderapp.data.medications
+import com.example.medicationreminderapp.data.repository.medication.MedicationRepository
+import com.example.medicationreminderapp.data.repository.user.SessionRepository
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class MedicationsViewModel @Inject constructor() : ViewModel() {
+class MedicationsViewModel @Inject constructor(
+    private val medicationRepository: MedicationRepository,
+    private val sessionRepository: SessionRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MedicationsUiState>(MedicationsUiState.Init)
     val uiState: StateFlow<MedicationsUiState> = _uiState.asStateFlow()
+
+    private var allMedications: List<Medication> = emptyList()
 
     init {
         loadMedications()
@@ -24,26 +31,41 @@ class MedicationsViewModel @Inject constructor() : ViewModel() {
     private fun loadMedications() {
         viewModelScope.launch {
             _uiState.value = MedicationsUiState.Loading
-            delay(800)
-            _uiState.value = MedicationsUiState.Success(
-                inputText = "",
-                medications = medications
-            )
+            try {
+                val userId = sessionRepository.observeLoggedInUserId().first()
+                if (userId == null) {
+                    _uiState.value = MedicationsUiState.Error("Session expired. Please log in again.")
+                    return@launch
+                }
+                medicationRepository.observeMedicationsByUser(userId).collect { medications ->
+                    allMedications = medications
+                    val currentInput = (_uiState.value as? MedicationsUiState.Success)?.inputText ?: ""
+                    _uiState.value = MedicationsUiState.Success(
+                        inputText = currentInput,
+                        medications = filter(currentInput)
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.value = MedicationsUiState.Error(
+                    e.message ?: "Failed to load medications."
+                )
+            }
         }
     }
 
-    fun onInputTextChange(input: String){
-        val filteredMedications = medications.filter {
-            it.name.contains(input, ignoreCase = true)
-        }
-
+    fun onInputTextChange(input: String) {
         _uiState.value = MedicationsUiState.Success(
             inputText = input,
-            medications = filteredMedications
+            medications = filter(input)
         )
     }
 
     fun resetUiState() {
         loadMedications()
+    }
+
+    private fun filter(input: String): List<Medication> {
+        return if (input.isEmpty()) allMedications
+               else allMedications.filter { it.name.contains(input, ignoreCase = true) }
     }
 }

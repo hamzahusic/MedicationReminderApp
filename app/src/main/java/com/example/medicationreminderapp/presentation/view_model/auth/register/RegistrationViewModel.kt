@@ -1,8 +1,8 @@
 package com.example.medicationreminderapp.presentation.view_model.auth.register
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicationreminderapp.data.repository.user.SessionRepository
 import com.example.medicationreminderapp.data.repository.user.UserRepository
 import com.example.medicationreminderapp.presentation.view_model.auth.util.RegisterUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<RegistrationUiState>(RegistrationUiState.Init)
@@ -38,6 +39,11 @@ class RegistrationViewModel @Inject constructor(
                 }
 
                 userRepository.insertUser(userData)
+
+                val insertedUser = userRepository.getUserByEmail(userData.email)
+                if (insertedUser != null) {
+                    sessionRepository.saveLoggedInUserId(insertedUser.id)
+                }
 
                 _uiState.value = RegistrationUiState.Success
                 _navigationEvent.send(RegistrationNavigationEvent.Navigate)

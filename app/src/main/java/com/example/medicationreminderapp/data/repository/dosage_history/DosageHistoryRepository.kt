@@ -1,0 +1,12 @@
+package com.example.medicationreminderapp.data.repository.dosage_history
+
+import com.example.medicationreminderapp.data.model.local.entity.DosageHistoryEntity
+import kotlinx.coroutines.flow.Flow
+
+interface DosageHistoryRepository {
+    suspend fun insertDosageHistory(dosageHistory: DosageHistoryEntity)
+    fun observeHistoryForDay(startOfDay: Long, endOfDay: Long): Flow<List<DosageHistoryEntity>>
+    suspend fun getHistoryForDay(startOfDay: Long, endOfDay: Long): List<DosageHistoryEntity>
+    suspend fun updateDosageHistory(dosageHistory: DosageHistoryEntity)
+    suspend fun deleteDosageHistory(dosageHistory: DosageHistoryEntity)
+}

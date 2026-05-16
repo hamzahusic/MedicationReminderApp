@@ -28,6 +28,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,6 +47,7 @@ import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScre
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.DetailsCard
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
 import com.example.medicationreminderapp.presentation.util.formatTime
+import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsNavigationEvent
 import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsUiState
 import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsViewModel
 
@@ -56,6 +58,14 @@ fun MedicationDetailsScreen(
     onNavigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is MedicationDetailsNavigationEvent.NavigateBack -> onNavigateBack()
+            }
+        }
+    }
 
     when (val state = uiState) {
         is MedicationDetailsUiState.Loading -> {
@@ -72,7 +82,8 @@ fun MedicationDetailsScreen(
         is MedicationDetailsUiState.Success -> {
             MedicationDetailsScreenContent(
                 onNavigateBack = onNavigateBack,
-                medication = state.medication
+                medication = state.medication,
+                onDeleteClick = viewModel::onDeleteClick
             )
         }
 
@@ -86,7 +97,8 @@ fun MedicationDetailsScreen(
 @Composable
 fun MedicationDetailsScreenContent(
     onNavigateBack: () -> Unit,
-    medication: Medication
+    medication: Medication,
+    onDeleteClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -215,7 +227,7 @@ fun MedicationDetailsScreenContent(
                         )
                     }
                     Button(
-                        onClick = {},
+                        onClick = onDeleteClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
