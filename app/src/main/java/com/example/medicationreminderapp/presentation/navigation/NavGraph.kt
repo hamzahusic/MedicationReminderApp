@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -31,6 +32,7 @@ fun NavGraph(
     ) {
         composable(route = Screen.Home.route) {
             HomeScreen(
+                viewModel = hiltViewModel(),
                 onNavigateToScreen = { route ->
                     navController.navigate(route)
                 }
@@ -39,6 +41,7 @@ fun NavGraph(
 
         composable(route = Screen.AddMedication.route) {
             AddMedicationScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 }
@@ -47,6 +50,7 @@ fun NavGraph(
 
         composable(route = Screen.Login.route) {
             LoginScreen(
+                viewModel = hiltViewModel(),
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route)
                 },
@@ -58,6 +62,7 @@ fun NavGraph(
 
         composable(route = Screen.Register.route) {
             RegisterScreen(
+                viewModel = hiltViewModel(),
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route)
                 },
@@ -69,6 +74,7 @@ fun NavGraph(
 
         composable(route = Screen.History.route) {
             HistoryScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
@@ -80,6 +86,7 @@ fun NavGraph(
 
         composable(route = Screen.Medications.route) {
             MedicationsScreen(
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 },
@@ -99,10 +106,9 @@ fun NavGraph(
                     type = NavType.IntType
                 }
             ),
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id") ?: 0
+        ) {
             MedicationDetailsScreen(
-                id = id,
+                viewModel = hiltViewModel(),
                 onNavigateBack = {
                     navController.navigateUp()
                 }

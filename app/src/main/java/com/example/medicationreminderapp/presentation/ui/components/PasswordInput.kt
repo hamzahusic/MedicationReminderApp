@@ -39,7 +39,6 @@ fun PasswordInput(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp)),
-
+            .clip(RoundedCornerShape(12.dp))
         )
 }

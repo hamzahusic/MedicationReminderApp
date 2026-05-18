@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,21 +33,68 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.data.medications
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medications.component.SearchBar
+import com.example.medicationreminderapp.presentation.view_model.medications.MedicationsUiState
+import com.example.medicationreminderapp.presentation.view_model.medications.MedicationsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationsScreen(
+    viewModel: MedicationsViewModel,
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit,
     onNavigateToMedicationDetailsScreen: (route:String) -> Unit
 ){
-    var inputText by remember { mutableStateOf("") }
-    var filteredMedication by remember { mutableStateOf(medications) }
 
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    when (val state = uiState) {
+        is MedicationsUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is MedicationsUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is MedicationsUiState.Success -> {
+            MedicationsScreenContent(
+                onNavigateBack = onNavigateBack,
+                onNavigateToAddMedication = onNavigateToAddMedication,
+                onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
+                inputText = state.inputText,
+                onInputTextChange = viewModel::onInputTextChange,
+                filteredMedication = state.medications,
+                hasAnyMedication = state.medications.isNotEmpty() || state.inputText.isNotEmpty()
+            )
+        }
+        else -> {
+            //no-op
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MedicationsScreenContent(
+    onNavigateBack: () -> Unit,
+    onNavigateToAddMedication: () -> Unit,
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
+    inputText: String,
+    onInputTextChange: (String) -> Unit,
+    filteredMedication: List<Medication>,
+    hasAnyMedication: Boolean
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -73,12 +121,7 @@ fun MedicationsScreen(
         ) {
 
             item{
-                SearchBar(inputText, {
-                    input -> inputText = input
-                            filteredMedication = medications.filter {
-                                it.name.lowercase().contains(input.lowercase())
-                            }
-                })
+                SearchBar(inputText, { input -> onInputTextChange(input) })
             }
 
             item{
@@ -91,14 +134,12 @@ fun MedicationsScreen(
             }
 
 
-            if (filteredMedication.isEmpty() && medications.isNotEmpty()){
-                item{
-                    EmptyListLabel(
-                        content = "No medication found"
-                    )
+            if (filteredMedication.isEmpty() && hasAnyMedication) {
+                item {
+                    EmptyListLabel(content = "No medication found")
                 }
-            } else if(medications.isEmpty()){
-                item{
+            } else if (!hasAnyMedication) {
+                item {
                     EmptyListLabel()
                 }
             }
@@ -144,6 +185,7 @@ fun MedicationsScreen(
 fun MedicationScreenPreview(){
     MedicationReminderAppTheme {
         MedicationsScreen(
+            viewModel = hiltViewModel(),
             onNavigateBack = {},
             onNavigateToAddMedication = {},
             onNavigateToMedicationDetailsScreen = {}

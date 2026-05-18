@@ -28,6 +28,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,23 +37,69 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.data.medications
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.DetailsCard
 import com.example.medicationreminderapp.presentation.ui.screens.medication_details.component.StausLabel
 import com.example.medicationreminderapp.presentation.util.formatTime
+import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsNavigationEvent
+import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsUiState
+import com.example.medicationreminderapp.presentation.view_model.medication_details.MedicationDetailsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationDetailsScreen(
-    id: Int,
+    viewModel: MedicationDetailsViewModel,
     onNavigateBack: () -> Unit
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val medication: Medication? = medications.find { it.id == id}
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is MedicationDetailsNavigationEvent.NavigateBack -> onNavigateBack()
+            }
+        }
+    }
 
+    when (val state = uiState) {
+        is MedicationDetailsUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is MedicationDetailsUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is MedicationDetailsUiState.Success -> {
+            MedicationDetailsScreenContent(
+                onNavigateBack = onNavigateBack,
+                medication = state.medication,
+                onDeleteClick = viewModel::onDeleteClick
+            )
+        }
+
+        else -> {
+            //no-op
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MedicationDetailsScreenContent(
+    onNavigateBack: () -> Unit,
+    medication: Medication,
+    onDeleteClick: () -> Unit
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -76,14 +124,6 @@ fun MedicationDetailsScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .fillMaxHeight()
         ) {
-
-            if(medication == null){
-                EmptyListLabel(
-                    content = "This medication doesn't exist"
-                )
-                return@Column
-            }
-
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
                 // Hero card
@@ -132,11 +172,15 @@ fun MedicationDetailsScreen(
 
                 // Stat cards row
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    item{
+                    item {
                         DetailsCard("DOSAGE", medication.dosage, Modifier.fillParentMaxWidth(0.5f))
                     }
-                    item{
-                        DetailsCard("DOSAGE TIME", formatTime(medication.takeAtHour, medication.takeAtMinute), Modifier.fillParentMaxWidth(0.5f))
+                    item {
+                        DetailsCard(
+                            "DOSAGE TIME",
+                            formatTime(medication.takeAtHour, medication.takeAtMinute),
+                            Modifier.fillParentMaxWidth(0.5f)
+                        )
                     }
                 }
 
@@ -183,7 +227,7 @@ fun MedicationDetailsScreen(
                         )
                     }
                     Button(
-                        onClick = {},
+                        onClick = onDeleteClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.error
@@ -207,8 +251,8 @@ fun MedicationDetailsScreen(
 fun MedicationDetailsScreenPreview() {
     MedicationReminderAppTheme {
         MedicationDetailsScreen(
-            1,
-            {}
+            viewModel = hiltViewModel(),
+            onNavigateBack = {}
         )
     }
 }

@@ -29,15 +29,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
 import com.example.medicationreminderapp.presentation.ui.components.PasswordInput
+import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
+import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
 import com.example.medicationreminderapp.presentation.ui.screens.register.util.isRegistrationFormValid
+import com.example.medicationreminderapp.presentation.view_model.auth.register.RegistrationUiState
+import com.example.medicationreminderapp.presentation.view_model.auth.register.RegistrationViewModel
+import com.example.medicationreminderapp.presentation.view_model.auth.util.RegisterUserData
 
 @Composable
 fun RegisterScreen(
+    viewModel: RegistrationViewModel,
     onNavigateToHome: () -> Unit,
     onNavigateToLogin: () -> Unit
 ){
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -46,6 +56,66 @@ fun RegisterScreen(
 
     val isValid by remember { derivedStateOf { isRegistrationFormValid(username, email, password) } }
 
+    when (val state = uiState) {
+        RegistrationUiState.Loading -> {
+            LoadingScreen()
+        }
+
+        is RegistrationUiState.Error -> {
+            ErrorScreen(
+                message = state.message,
+                onRetryClick = { viewModel.resetUiState() }
+            )
+        }
+
+        is RegistrationUiState.Success -> {
+            onNavigateToHome()
+        }
+
+        else -> {
+            RegisterScreenContent(
+                onNavigateToHome = onNavigateToHome,
+                onNavigateToLogin = onNavigateToLogin,
+                username = username,
+                onUsernameChange = { updated -> username = updated },
+                email = email,
+                onEmailChange = { updated -> email = updated },
+                password = password,
+                onPasswordChange = { updated -> password = updated},
+                passwordVisible = passwordVisible,
+                setIsPasswordVisible = { passwordVisible = !passwordVisible },
+                isValid = isValid,
+                onRegisterClick = {
+                    android.util.Log.d("DB_TEST", "REGISTER BUTTON PRESSED")
+                    viewModel.onRegisterClick(
+                        RegisterUserData(
+                            username = username,
+                            email = email,
+                            password = password
+                        )
+                    )
+                },
+            )
+        }
+    }
+
+}
+
+@Composable
+fun RegisterScreenContent(
+    onNavigateToHome: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    username: String,
+    onUsernameChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    setIsPasswordVisible: () -> Unit,
+    isValid: Boolean,
+    onRegisterClick: () -> Unit
+){
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         modifier = Modifier.fillMaxSize()
@@ -115,7 +185,7 @@ fun RegisterScreen(
 
                 TextField(
                     value = username,
-                    onValueChange = { username = it },
+                    onValueChange = { onUsernameChange(it) },
                     placeholder = { Text("John Doe") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -130,7 +200,7 @@ fun RegisterScreen(
 
                 TextField(
                     value = email,
-                    onValueChange = { email = it },
+                    onValueChange = { onEmailChange(it) },
                     placeholder = { Text("john.doe@gmail.com") },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -147,13 +217,13 @@ fun RegisterScreen(
                 PasswordInput(
                     password,
                     passwordVisible,
-                    { passwordVisible = !passwordVisible },
-                    { updated -> password = updated }
+                    { setIsPasswordVisible() },
+                    { updated -> onPasswordChange(updated) }
                 )
 
 
                 Button(
-                    onClick = { onNavigateToHome() },
+                    onClick = { onRegisterClick() },
                     modifier = Modifier.fillMaxWidth().padding(top = 35.dp),
                     shape = RoundedCornerShape(12.dp),
                     enabled = isValid
@@ -192,7 +262,6 @@ fun RegisterScreen(
 
         }
     }
-
 }
 
 @Preview
@@ -200,6 +269,7 @@ fun RegisterScreen(
 fun RegisterScreenPreview(){
     MedicationReminderAppTheme() {
         RegisterScreen(
+            viewModel = hiltViewModel(),
             onNavigateToHome = {},
             onNavigateToLogin = {}
         )

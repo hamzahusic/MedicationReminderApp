@@ -11,6 +11,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,18 +20,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.medicationreminderapp.data.medications
 import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.components.MedicationCard
+import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 
 @Composable
 fun UpcomingMedication(
-    onNavigateToMedicationDetailsScreen: (route: String) -> Unit
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
+    medications: List<Medication>
 ) {
     Column{
         val filters = listOf("All", "Morning", "Afternoon")
         var selectedFilter by remember { mutableStateOf("All") }
-        var filteredMedications by remember { mutableStateOf(medications) }
+        val filteredMedications by remember {
+            derivedStateOf {
+                medications.filter {
+                    when (selectedFilter) {
+                        "Morning" -> it.takeAtHour < 12
+                        "Afternoon" -> it.takeAtHour >= 12
+                        else -> true
+                    }
+                }
+            }
+        }
 
         Text(
             text = "UPCOMING",
@@ -48,16 +60,7 @@ fun UpcomingMedication(
                 items(filters) { filter ->
                     FilterChip(
                         selected = selectedFilter == filter,
-                        onClick = {
-                            selectedFilter = filter
-                            filteredMedications = medications.filter {
-                                when (filter) {
-                                    "Morning" -> it.takeAtHour < 12
-                                    "Afternoon" -> it.takeAtHour >= 12
-                                    else -> true
-                                }
-                            }
-                        },
+                        onClick = { selectedFilter = filter },
                         label = { Text(filter) },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
