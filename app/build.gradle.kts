@@ -67,6 +67,18 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.2.1")
 
+    // Retrofit - HTTP client abstraction
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+
+// Gson converter
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+
+// OkHttp - the underlying HTTP engine
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+// Logging interceptor - prints requests/responses in Logcat
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
