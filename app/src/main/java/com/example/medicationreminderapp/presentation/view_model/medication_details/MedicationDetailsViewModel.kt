@@ -9,6 +9,7 @@ import com.example.medicationreminderapp.data.repository.user.SessionRepository
 import com.example.medicationreminderapp.data.service.FirebaseAuthService
 import com.example.medicationreminderapp.data.service.FirestoreService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -37,12 +38,15 @@ class MedicationDetailsViewModel @Inject constructor(
     private val _navigationEvent = Channel<MedicationDetailsNavigationEvent>(Channel.BUFFERED)
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
+    private var loadJob: Job? = null
+
     init {
         loadMedication()
     }
 
     private fun loadMedication() {
-        viewModelScope.launch {
+        loadJob?.cancel()
+        loadJob = viewModelScope.launch {
             _uiState.value = MedicationDetailsUiState.Loading
             try {
                 val medication = medicationRepository.getMedicationById(id)
@@ -94,6 +98,7 @@ class MedicationDetailsViewModel @Inject constructor(
 
     fun onDeleteClick() {
         val current = _uiState.value as? MedicationDetailsUiState.Success ?: return
+        loadJob?.cancel()
         viewModelScope.launch {
             _uiState.value = MedicationDetailsUiState.Loading
             try {
