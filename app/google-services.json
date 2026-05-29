@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37807007974",
+    "project_id": "medpulse-a8142",
+    "storage_bucket": "medpulse-a8142.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37807007974:android:2534c6b0074b1a33c0b327",
+        "android_client_info": {
+          "package_name": "com.example.medicationreminderapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ1ORAJ2VWk2JOcTbKf8NLAlZ4qK96FOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

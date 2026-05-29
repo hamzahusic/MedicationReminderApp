@@ -2,6 +2,7 @@ package com.example.medicationreminderapp.presentation.view_model.medications
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.medicationreminderapp.data.repository.medication.MedicationNetworkRepository
 import com.example.medicationreminderapp.data.repository.medication.MedicationRepository
 import com.example.medicationreminderapp.data.repository.user.SessionRepository
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
@@ -16,11 +17,15 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicationsViewModel @Inject constructor(
     private val medicationRepository: MedicationRepository,
+    private val medicationNetworkRepository: MedicationNetworkRepository,
     private val sessionRepository: SessionRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MedicationsUiState>(MedicationsUiState.Init)
     val uiState: StateFlow<MedicationsUiState> = _uiState.asStateFlow()
+
+    private val _networkSyncState = MutableStateFlow<NetworkSyncState>(NetworkSyncState.Idle)
+    val networkSyncState: StateFlow<NetworkSyncState> = _networkSyncState.asStateFlow()
 
     private var allMedications: List<Medication> = emptyList()
 
@@ -51,6 +56,24 @@ class MedicationsViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun syncFromNetwork() {
+        viewModelScope.launch {
+            _networkSyncState.value = NetworkSyncState.Loading
+            try {
+                val remote = medicationNetworkRepository.getRemoteMedications()
+                _networkSyncState.value = NetworkSyncState.Success(remote)
+            } catch (e: Exception) {
+                _networkSyncState.value = NetworkSyncState.Error(
+                    e.message ?: "Network sync failed."
+                )
+            }
+        }
+    }
+
+    fun dismissNetworkSync() {
+        _networkSyncState.value = NetworkSyncState.Idle
     }
 
     fun onInputTextChange(input: String) {

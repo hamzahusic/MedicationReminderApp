@@ -33,8 +33,11 @@ fun NavGraph(
         composable(route = Screen.Home.route) {
             HomeScreen(
                 viewModel = hiltViewModel(),
-                onNavigateToScreen = { route ->
-                    navController.navigate(route)
+                onNavigateToScreen = { route -> navController.navigate(route) },
+                onLogout = {
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }
@@ -42,9 +45,7 @@ fun NavGraph(
         composable(route = Screen.AddMedication.route) {
             AddMedicationScreen(
                 viewModel = hiltViewModel(),
-                onNavigateBack = {
-                    navController.navigateUp()
-                }
+                onNavigateBack = { navController.navigateUp() }
             )
         }
 
@@ -52,11 +53,11 @@ fun NavGraph(
             LoginScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToHome = {
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
                 },
-                onNavigateToRegister = {
-                    navController.navigate(Screen.Register.route)
-                }
+                onNavigateToRegister = { navController.navigate(Screen.Register.route) }
             )
         }
 
@@ -64,56 +65,39 @@ fun NavGraph(
             RegisterScreen(
                 viewModel = hiltViewModel(),
                 onNavigateToHome = {
-                    navController.navigate(Screen.Home.route)
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
                 },
-                onNavigateToLogin = {
-                    navController.navigate(Screen.Login.route)
-                }
+                onNavigateToLogin = { navController.navigate(Screen.Login.route) }
             )
         }
 
         composable(route = Screen.History.route) {
             HistoryScreen(
                 viewModel = hiltViewModel(),
-                onNavigateBack = {
-                    navController.navigateUp()
-                },
-                onNavigateToAddMedication = {
-                    navController.navigate(Screen.AddMedication.route)
-                }
+                onNavigateBack = { navController.navigateUp() },
+                onNavigateToAddMedication = { navController.navigate(Screen.AddMedication.route) }
             )
         }
 
         composable(route = Screen.Medications.route) {
             MedicationsScreen(
                 viewModel = hiltViewModel(),
-                onNavigateBack = {
-                    navController.navigateUp()
-                },
-                onNavigateToAddMedication = {
-                    navController.navigate(Screen.AddMedication.route)
-                },
-                onNavigateToMedicationDetailsScreen = { route ->
-                    navController.navigate(route)
-                }
+                onNavigateBack = { navController.navigateUp() },
+                onNavigateToAddMedication = { navController.navigate(Screen.AddMedication.route) },
+                onNavigateToMedicationDetailsScreen = { route -> navController.navigate(route) }
             )
         }
 
         composable(
             route = Screen.MedicationDetails.route,
-            arguments = listOf(
-                navArgument("id") {
-                    type = NavType.IntType
-                }
-            ),
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) {
             MedicationDetailsScreen(
                 viewModel = hiltViewModel(),
-                onNavigateBack = {
-                    navController.navigateUp()
-                }
+                onNavigateBack = { navController.navigateUp() }
             )
         }
-
     }
 }
