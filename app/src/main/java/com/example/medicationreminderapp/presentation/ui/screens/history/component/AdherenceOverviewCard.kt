@@ -26,8 +26,10 @@ import com.example.medicationreminderapp.presentation.theme.RedMissed
 
 @Composable
 fun AdherenceOverviewCard(
-    uploadProgress:Float
-){
+    uploadProgress: Float,
+    taken: Int,
+    missed: Int
+) {
     // Adherence overview card
     Box(
         modifier = Modifier
@@ -91,7 +93,7 @@ fun AdherenceOverviewCard(
                                 .background(GreenTaken)
                         )
                         Text(
-                            text = "Taken: 2",
+                            text = "Taken: $taken",
                             color = GreenTaken,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp
@@ -108,7 +110,7 @@ fun AdherenceOverviewCard(
                                 .background(RedMissed)
                         )
                         Text(
-                            text = "Missed: 1",
+                            text = "Missed: $missed",
                             color = RedMissed,
                             fontWeight = FontWeight.SemiBold,
                             fontSize = 14.sp

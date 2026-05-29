@@ -27,13 +27,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.medicationreminderapp.presentation.theme.GreenContainer
+import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 import com.example.medicationreminderapp.presentation.util.formatTime
 
 @Composable
 fun MedicationCard(
     medication: Medication,
-    onNavigateToMedicationDetailsScreen: (route:String) -> Unit
+    onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
+    onTake: (() -> Unit)? = null
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -75,20 +78,25 @@ fun MedicationCard(
                 }
             }
             Row() {
-                Button(
-                    onClick = {},
-                    shape = RoundedCornerShape(10.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer,
-                        contentColor = MaterialTheme.colorScheme.primary
-                    )
-                ) {
-                    Text(
-                        text = "Take",
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 13.sp
-                    )
+                if (onTake != null) {
+                    Button(
+                        onClick = { if (!medication.isTaken) onTake() },
+                        enabled = !medication.isTaken,
+                        shape = RoundedCornerShape(10.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if (medication.isTaken) GreenContainer else MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = if (medication.isTaken) GreenTaken else MaterialTheme.colorScheme.primary,
+                            disabledContainerColor = GreenContainer,
+                            disabledContentColor = GreenTaken
+                        )
+                    ) {
+                        Text(
+                            text = if (medication.isTaken) "Taken" else "Take",
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 13.sp
+                        )
+                    }
                 }
 
                 IconButton(onClick = { onNavigateToMedicationDetailsScreen("medication/${medication.id}") }) {

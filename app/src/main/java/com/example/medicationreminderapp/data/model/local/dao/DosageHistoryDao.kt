@@ -24,6 +24,9 @@ interface DosageHistoryDao {
     @Query("SELECT * FROM dosage_history WHERE scheduled_date BETWEEN :startOfDay AND :endOfDay ORDER BY scheduled_date ASC")
     suspend fun getHistoryForDay(startOfDay: Long, endOfDay: Long): List<DosageHistoryEntity>
 
+    @Query("SELECT schedule_id FROM dosage_history WHERE scheduled_date BETWEEN :startOfDay AND :endOfDay AND is_taken = 1")
+    fun observeTakenScheduleIdsForDay(startOfDay: Long, endOfDay: Long): Flow<List<Int>>
+
     @Update
     suspend fun updateDosageHistory(dosageHistory: DosageHistoryEntity)
 

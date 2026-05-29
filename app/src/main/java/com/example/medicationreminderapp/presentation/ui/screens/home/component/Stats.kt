@@ -10,12 +10,12 @@ import com.example.medicationreminderapp.presentation.theme.GreenTaken
 import com.example.medicationreminderapp.presentation.theme.RedMissed
 
 @Composable
-fun Stats() {
+fun Stats(taken: Int, missed: Int) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        StatCard("TAKEN", 2, "doses today", GreenTaken, modifier = Modifier.weight(1f))
-        StatCard("MISSED", 1, "needs action", RedMissed, modifier = Modifier.weight(1f))
+        StatCard("TAKEN", taken, "doses today", GreenTaken, modifier = Modifier.weight(1f))
+        StatCard("MISSED", missed, "needs action", RedMissed, modifier = Modifier.weight(1f))
     }
 }

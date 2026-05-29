@@ -5,7 +5,7 @@ import com.example.medicationreminderapp.presentation.view_model.add_medication.
 import kotlinx.coroutines.flow.Flow
 
 interface MedicationRepository {
-    suspend fun insertMedication(data: AddMedicationData)
+    suspend fun insertMedication(data: AddMedicationData): Int
     fun observeMedicationsByUser(userId: Int): Flow<List<Medication>>
     suspend fun getMedicationsByUser(userId: Int): List<Medication>
     suspend fun getMedicationById(id: Int): Medication?

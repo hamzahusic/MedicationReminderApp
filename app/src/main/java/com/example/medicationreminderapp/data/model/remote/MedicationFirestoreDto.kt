@@ -5,5 +5,6 @@ data class MedicationFirestoreDto(
     val name: String = "",
     val dosage: String = "",
     val userId: Int = 0,
-    val createdAt: Long = 0L
+    val createdAt: Long = 0L,
+    val taken: Boolean = false
 )

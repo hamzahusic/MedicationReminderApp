@@ -6,6 +6,7 @@ data class Medication(
     val dosage: String,
     val takeAtHour: Int,
     val takeAtMinute: Int,
+    val scheduleId: Int = 0,
     val isTaken: Boolean = false,
     val takenAtHour: Int = 0,
     val takenAtMinute: Int = 0,

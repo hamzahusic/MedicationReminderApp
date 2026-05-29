@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,14 +83,14 @@ class AddMedicationViewModel @Inject constructor(
                     minute = current.selectedMinute,
                     userId = userId
                 )
-                medicationRepository.insertMedication(data)
+                val medicationId = medicationRepository.insertMedication(data)
 
                 // Sync to Firestore if the user is signed in with Firebase
                 val firebaseUid = firebaseAuthService.currentUser?.uid
                 if (firebaseUid != null) {
                     try {
                         val dto = MedicationFirestoreDto(
-                            id = UUID.randomUUID().toString(),
+                            id = medicationId.toString(),
                             name = current.name,
                             dosage = current.dosage,
                             userId = userId,

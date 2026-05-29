@@ -14,7 +14,8 @@ fun MedicationWithScheduleEntity.toDomain(): Medication? {
         name = name,
         dosage = dosage,
         takeAtHour = h,
-        takeAtMinute = m
+        takeAtMinute = m,
+        scheduleId = scheduleId ?: 0
     )
 }
 

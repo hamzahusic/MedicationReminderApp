@@ -66,7 +66,10 @@ fun HomeScreen(
         is HomeUiState.Success -> HomeScreenContent(
             onNavigateToScreen = onNavigateToScreen,
             onLogout = viewModel::logout,
+            onTakeMedication = viewModel::onTakeMedication,
             progress = state.progress,
+            taken = state.taken,
+            missed = state.missed,
             medications = state.medications,
             cloudSyncCount = cloudSyncCount
         )
@@ -80,7 +83,10 @@ fun HomeScreen(
 private fun HomeScreenContent(
     onNavigateToScreen: (route: String) -> Unit,
     onLogout: () -> Unit,
+    onTakeMedication: (Medication) -> Unit,
     progress: Float,
+    taken: Int,
+    missed: Int,
     medications: List<Medication>,
     cloudSyncCount: Int
 ) {
@@ -122,7 +128,7 @@ private fun HomeScreenContent(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
             Greeting()
-            Stats()
+            Stats(taken = taken, missed = missed)
             AdherenceStat(progress)
             if (cloudSyncCount > 0) {
                 Text(
@@ -133,6 +139,7 @@ private fun HomeScreenContent(
             }
             UpcomingMedication(
                 onNavigateToMedicationDetailsScreen = onNavigateToScreen,
+                onTakeMedication = onTakeMedication,
                 medications = medications
             )
         }

@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -40,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.medicationreminderapp.presentation.theme.MedicationReminderAppTheme
-import com.example.medicationreminderapp.presentation.ui.components.EmptyListLabel
 import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medication
 import com.example.medicationreminderapp.presentation.ui.screens.loading.LoadingScreen
 import com.example.medicationreminderapp.presentation.ui.screens.error.ErrorScreen
@@ -83,6 +81,7 @@ fun MedicationDetailsScreen(
             MedicationDetailsScreenContent(
                 onNavigateBack = onNavigateBack,
                 medication = state.medication,
+                onMarkAsTaken = viewModel::onMarkAsTaken,
                 onDeleteClick = viewModel::onDeleteClick
             )
         }
@@ -98,6 +97,7 @@ fun MedicationDetailsScreen(
 fun MedicationDetailsScreenContent(
     onNavigateBack: () -> Unit,
     medication: Medication,
+    onMarkAsTaken: () -> Unit,
     onDeleteClick: () -> Unit
 ) {
     Scaffold(
@@ -202,44 +202,33 @@ fun MedicationDetailsScreenContent(
 
             // Bottom action buttons
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (!medication.isTaken) {
+                    Button(
+                        onClick = onMarkAsTaken,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Mark as Taken",
+                            modifier = Modifier.padding(vertical = 10.dp),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+
                 Button(
-                    onClick = {},
-                    modifier = Modifier.fillMaxWidth()
+                    onClick = onDeleteClick,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
                 ) {
                     Text(
-                        text = "Mark as Taken",
+                        text = "Delete",
                         modifier = Modifier.padding(vertical = 10.dp),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold
                     )
-                }
-
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    OutlinedButton(
-                        onClick = {},
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Text(
-                            text = "Edit",
-                            modifier = Modifier.padding(vertical = 10.dp),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
-                    Button(
-                        onClick = onDeleteClick,
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = MaterialTheme.colorScheme.error
-                        )
-                    ) {
-                        Text(
-                            text = "Delete",
-                            modifier = Modifier.padding(vertical = 10.dp),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    }
                 }
             }
         }

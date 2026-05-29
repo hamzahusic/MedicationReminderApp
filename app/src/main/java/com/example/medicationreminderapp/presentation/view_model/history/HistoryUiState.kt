@@ -11,6 +11,8 @@ sealed interface HistoryUiState {
     @RequiresApi(Build.VERSION_CODES.O)
     data class Success(
         val progress: Float,
+        val taken: Int,
+        val missed: Int,
         val today: LocalDate,
         val selectedDate: LocalDate,
         val medications: List<Medication>

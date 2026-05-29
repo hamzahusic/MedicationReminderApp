@@ -16,9 +16,10 @@ class MedicationRepositoryImpl @Inject constructor(
     private val medicationScheduleDao: MedicationScheduleDao
 ) : MedicationRepository {
 
-    override suspend fun insertMedication(data: AddMedicationData) {
-        val medicationId = medicationDao.insertMedication(data.toMedicationEntity())
-        medicationScheduleDao.insertSchedule(data.toScheduleEntity(medicationId.toInt()))
+    override suspend fun insertMedication(data: AddMedicationData): Int {
+        val medicationId = medicationDao.insertMedication(data.toMedicationEntity()).toInt()
+        medicationScheduleDao.insertSchedule(data.toScheduleEntity(medicationId))
+        return medicationId
     }
 
     override fun observeMedicationsByUser(userId: Int): Flow<List<Medication>> {
