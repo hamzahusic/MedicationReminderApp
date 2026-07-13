@@ -11,7 +11,6 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,19 +26,18 @@ import com.example.medicationreminderapp.presentation.ui.screens.home.util.Medic
 @Composable
 fun UpcomingMedication(
     onNavigateToMedicationDetailsScreen: (route: String) -> Unit,
+    onTakeMedication: (Medication) -> Unit,
     medications: List<Medication>
 ) {
     Column{
         val filters = listOf("All", "Morning", "Afternoon")
         var selectedFilter by remember { mutableStateOf("All") }
-        val filteredMedications by remember {
-            derivedStateOf {
-                medications.filter {
-                    when (selectedFilter) {
-                        "Morning" -> it.takeAtHour < 12
-                        "Afternoon" -> it.takeAtHour >= 12
-                        else -> true
-                    }
+        val filteredMedications = remember(medications, selectedFilter) {
+            medications.filter {
+                when (selectedFilter) {
+                    "Morning" -> it.takeAtHour < 12
+                    "Afternoon" -> it.takeAtHour >= 12
+                    else -> true
                 }
             }
         }
@@ -82,8 +80,9 @@ fun UpcomingMedication(
             ) {
                 items(filteredMedications) { medication ->
                     MedicationCard(
-                        medication,
-                        onNavigateToMedicationDetailsScreen
+                        medication = medication,
+                        onNavigateToMedicationDetailsScreen = onNavigateToMedicationDetailsScreen,
+                        onTake = { onTakeMedication(medication) }
                     )
                 }
             }

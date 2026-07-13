@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.medicationreminderapp.data.repository.user.SessionRepository
 import com.example.medicationreminderapp.data.repository.user.UserRepository
+import com.example.medicationreminderapp.data.service.FirebaseAuthService
 import com.example.medicationreminderapp.presentation.view_model.auth.util.RegisterUserData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val sessionRepository: SessionRepository
+    private val sessionRepository: SessionRepository,
+    private val firebaseAuthService: FirebaseAuthService
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<RegistrationUiState>(RegistrationUiState.Init)
@@ -44,6 +46,11 @@ class RegistrationViewModel @Inject constructor(
                 if (insertedUser != null) {
                     sessionRepository.saveLoggedInUserId(insertedUser.id)
                 }
+
+                // Firebase registration (non-blocking – local auth is the source of truth)
+                try {
+                    firebaseAuthService.register(userData.email, userData.password)
+                } catch (_: Exception) { }
 
                 _uiState.value = RegistrationUiState.Success
                 _navigationEvent.send(RegistrationNavigationEvent.Navigate)

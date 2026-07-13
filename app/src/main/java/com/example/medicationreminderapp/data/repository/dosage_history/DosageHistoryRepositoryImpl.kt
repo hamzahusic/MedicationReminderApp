@@ -17,8 +17,23 @@ class DosageHistoryRepositoryImpl @Inject constructor(
         return dosageHistoryDao.observeHistoryForDay(startOfDay, endOfDay)
     }
 
+    override fun observeTakenScheduleIdsForDay(startOfDay: Long, endOfDay: Long): Flow<List<Int>> {
+        return dosageHistoryDao.observeTakenScheduleIdsForDay(startOfDay, endOfDay)
+    }
+
     override suspend fun getHistoryForDay(startOfDay: Long, endOfDay: Long): List<DosageHistoryEntity> {
         return dosageHistoryDao.getHistoryForDay(startOfDay, endOfDay)
+    }
+
+    override suspend fun takeMedication(scheduleId: Int, scheduledDate: Long) {
+        dosageHistoryDao.insertDosageHistory(
+            DosageHistoryEntity(
+                scheduleId = scheduleId,
+                scheduledDate = scheduledDate,
+                isTaken = true,
+                takenAt = System.currentTimeMillis()
+            )
+        )
     }
 
     override suspend fun updateDosageHistory(dosageHistory: DosageHistoryEntity) {

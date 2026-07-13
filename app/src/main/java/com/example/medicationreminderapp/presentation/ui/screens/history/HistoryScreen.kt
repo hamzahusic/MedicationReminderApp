@@ -65,6 +65,8 @@ fun HistoryScreen(
                 onNavigateBack = onNavigateBack,
                 onNavigateToAddMedication = onNavigateToAddMedication,
                 progress = state.progress,
+                taken = state.taken,
+                missed = state.missed,
                 selectedDate = state.selectedDate,
                 today = state.today,
                 medications = state.medications,
@@ -86,6 +88,8 @@ private fun HistoryScreenContent(
     onNavigateBack: () -> Unit,
     onNavigateToAddMedication: () -> Unit,
     progress: Float,
+    taken: Int,
+    missed: Int,
     selectedDate: LocalDate,
     today: LocalDate,
     medications: List<Medication>,
@@ -134,7 +138,7 @@ private fun HistoryScreenContent(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            AdherenceOverviewCard(progress)
+            AdherenceOverviewCard(progress, taken, missed)
 
             Text(
                 text = "CALENDAR",

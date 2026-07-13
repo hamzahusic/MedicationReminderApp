@@ -122,7 +122,7 @@ fun AddMedicationScreenContent(
             TextField(
                 value = name,
                 onValueChange = { onNameChange(it) },
-                label = { Text("Paracetamol") },
+                placeholder = { Text("Paracetamol") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))
@@ -136,7 +136,7 @@ fun AddMedicationScreenContent(
             TextField(
                 value = dosage,
                 onValueChange = { onDosageChange(it) },
-                label = { Text("500mg") },
+                placeholder = { Text("500mg") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(12.dp))

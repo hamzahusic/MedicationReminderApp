@@ -6,6 +6,8 @@ sealed interface HomeUiState {
     data object Loading : HomeUiState
     data class Success(
         val progress: Float,
+        val taken: Int,
+        val missed: Int,
         val medications: List<Medication>
     ) : HomeUiState
     data class Error(val message: String) : HomeUiState
